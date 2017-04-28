@@ -11,10 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170409205031) do
+ActiveRecord::Schema.define(version: 20170427051014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ava_infos", force: :cascade do |t|
+    t.integer  "pharmacy_id", null: false
+    t.integer  "medicine_id", null: false
+    t.integer  "quantity",    null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "ava_infos", ["medicine_id"], name: "index_ava_infos_on_medicine_id", using: :btree
+  add_index "ava_infos", ["pharmacy_id", "medicine_id"], name: "index_ava_infos_on_pharmacy_id_and_medicine_id", unique: true, using: :btree
+  add_index "ava_infos", ["pharmacy_id"], name: "index_ava_infos_on_pharmacy_id", using: :btree
+
+  create_table "categories", force: :cascade do |t|
+    t.text     "category_name", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "categories", ["category_name"], name: "index_categories_on_category_name", unique: true, using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -31,6 +51,30 @@ ActiveRecord::Schema.define(version: 20170409205031) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
+  create_table "medicines", force: :cascade do |t|
+    t.text     "medicine_name",      null: false
+    t.float    "dosage",             null: false
+    t.float    "quantity_or_volume", null: false
+    t.text     "manufacturer",       null: false
+    t.string   "need_recipe",        null: false
+    t.float    "price",              null: false
+    t.integer  "category_id",        null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "medicines", ["category_id"], name: "index_medicines_on_category_id", using: :btree
+
+  create_table "pharmacies", force: :cascade do |t|
+    t.text     "adress",        null: false
+    t.integer  "number",        null: false
+    t.text     "nearest_metro", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "pharmacies", ["adress", "number", "nearest_metro"], name: "index_pharmacies_on_adress_and_number_and_nearest_metro", unique: true, using: :btree
 
   create_table "role_users", force: :cascade do |t|
     t.integer  "role_id",    null: false
@@ -95,6 +139,9 @@ ActiveRecord::Schema.define(version: 20170409205031) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  add_foreign_key "ava_infos", "medicines"
+  add_foreign_key "ava_infos", "pharmacies"
+  add_foreign_key "medicines", "categories"
   add_foreign_key "role_users", "roles"
   add_foreign_key "role_users", "users"
 end

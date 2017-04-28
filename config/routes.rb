@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :ava_infos
+  resources :medicines
+  resources :categories
+  resources :pharmacies
   resources :role_users
   resources :roles
   resources :password_resets

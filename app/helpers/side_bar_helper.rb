@@ -22,6 +22,23 @@ module SideBarHelper
        :controller => :roles, :action => :index,
        :icon => 'align-center',
        :class => 'long'},
+      {:name => "Категории лекарств",
+       :controller => :categories, :action => :index,
+       :icon => 'align-center',
+       :class => 'long'},
+      {:name => "Лекарства",
+       :controller => :medicines, :action => :index,
+       :icon => 'align-center',
+       :class => 'long'},
+      {:name => "Аптеки",
+       :controller => :pharmacies, :action => :index,
+       :icon => 'align-center',
+       :class => 'long'},
+      {:name => "Информация о наличии",
+       :controller => :ava_infos, :action => :index,
+       :icon => 'align-center',
+       :class => 'long'
+      }
     ]} 
     result << {
       :name => 'Заголовок ссылок',
@@ -40,7 +57,7 @@ module SideBarHelper
   
   def is_open?(ctr, act)
     case ctr.to_s
-    when 'users', 'roles'
+    when 'users', 'roles', 'categories', 'pharmacies', 'medicines', 'ava_infos'
       ctr.to_s == controller_name.to_s  
     else
       false

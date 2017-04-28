@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Medicine name:
+  = @medicine.medicine_name
+%p
+  %b Dosage:
+  = @medicine.dosage
+%p
+  %b Quantity or volume:
+  = @medicine.quantity_or_volume
+%p
+  %b Manufacturer:
+  = @medicine.manufacturer
+%p
+  %b Need recipe:
+  = @medicine.need_recipe
+%p
+  %b Price:
+  = @medicine.price
+%p
+  %b Category:
+  = @medicine.category
+
+= link_to 'Edit', edit_medicine_path(@medicine)
+\|
+= link_to 'Back', medicines_path

@@ -14,6 +14,26 @@ ru:
       new-button: Новая роль
       edit: Редактирование роли
       new: Создание роли
+    categories:
+      index: Категории лекарств
+      new-button: Новая категория
+      edit: Редактирование категории
+      new: Создание категории
+    medicines:
+      index: Лекарства
+      new-button: Добавить новое лекарство
+      edit: Редактирование лекарства
+      new: Создание лекарства
+    pharmacies:
+      index: Аптеки
+      new-button: Добавить новую аптеку
+      edit: Редактирование аптеки
+      new: Создание аптеки
+    ava_infos:
+      index: Информация о наличии лекарств в аптеках
+      new-button: Добавить запись о наличии
+      edit: Редактирование записи о наличии
+      new: Создание записи
   helpers:
     submit:
       create: Сохранить
@@ -45,6 +65,24 @@ ru:
         name: Обозначение
         info: Краткое название
         full_info: Описание
+      category:
+        category_name: Название категории
+      medicine:
+        medicine_name: Название лекарства
+        dosage: Дозировка
+        quantity_or_volume: Количество(или объем)
+        manufacturer: Производитель
+        need_recipe: Нужен ли рецепт?
+        price: Цена
+        category: Категория
+      pharmacy:
+        adress: Адрес аптеки
+        number: Номер аптеки
+        nearest_metro: Ближайшее метро
+      ava_info:
+        pharmacy: Номер аптеки
+        medicine: Название лекарства
+        quantity: Количество
     errors:
       models:
         person:

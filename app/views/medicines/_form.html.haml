@@ -1,0 +1,48 @@
+= form_for @medicine do |f|
+  = error_messages_for @medicine
+
+  .row
+    .col-md-8
+      .form-group
+        = f.label :medicine_name
+        = f.text_field :medicine_name, class: 'form-control'
+        = f.error_messages_for(:medicine_name)
+  .row
+    .col-md-8
+      .form-group
+        = f.label :dosage
+        = f.text_field :dosage, class: 'form-control'
+        = f.error_messages_for(:dosage)
+  .row
+    .col-md-8
+      .form-group
+        = f.label :quantity_or_volume
+        = f.text_field :quantity_or_volume, class: 'form-control'
+        = f.error_messages_for(:quantity_or_volume)
+  .row
+    .col-md-8
+      .form-group
+        = f.label :manufacturer
+        = f.text_field :manufacturer, class: 'form-control'
+        = f.error_messages_for(:manufacturer)
+  .row
+    .col-md-8
+      .form-group
+        = f.label :need_recipe
+        = f.text_field :need_recipe, class: 'form-control'
+        = f.error_messages_for(:need_recipe)
+  .row
+    .col-md-8
+      .form-group
+        = f.label :price
+        = f.text_field :price, class: 'form-control'
+        = f.error_messages_for(:price)
+  .row
+    .col-md-8
+      .form-group
+        = f.label :category
+        %br
+        = f.select(:category_id , options_for_select(category_for_select(), ), {include_blank: true})
+        = f.error_messages_for(:category_id)
+  .form-actions
+    = f.submit nil, class: 'btn btn-primary'

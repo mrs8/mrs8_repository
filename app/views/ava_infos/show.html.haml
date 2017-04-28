@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Pharmacy:
+  = @ava_info.pharmacy
+%p
+  %b Medicine:
+  = @ava_info.medicine
+%p
+  %b Quantity:
+  = @ava_info.quantity
+
+= link_to 'Edit', edit_ava_info_path(@ava_info)
+\|
+= link_to 'Back', ava_infos_path

@@ -1,0 +1,33 @@
+%h1 Listing medicines
+
+%table
+  %thead
+    %tr
+      %th Medicine name
+      %th Dosage
+      %th Quantity or volume
+      %th Manufacturer
+      %th Need recipe
+      %th Price
+      %th Category
+      %th
+      %th
+      %th
+
+  %tbody
+    - @medicines.each do |medicine|
+      %tr
+        %td= medicine.medicine_name
+        %td= medicine.dosage
+        %td= medicine.quantity_or_volume
+        %td= medicine.manufacturer
+        %td= medicine.need_recipe
+        %td= medicine.price
+        %td= medicine.category
+        %td= link_to 'Show', medicine
+        %td= link_to 'Edit', edit_medicine_path(medicine)
+        %td= link_to 'Destroy', medicine, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Medicine', new_medicine_path

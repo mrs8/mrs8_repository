@@ -1,0 +1,49 @@
+
+=breadcrumb_tag do
+  %li.active
+    Лекарства
+  %li
+    Администрирование
+
+%h1= t('app.medicines.index')
+
+
+%table.table.table-hover.table-striped.center
+  %caption
+    .pull-right
+      = link_to t('app.medicines.new-button'), new_medicine_path, class: 'btn btn-primary'
+  %thead
+    %tr
+      %th= Medicine.human_attribute_name(:medicine_name)
+      %th= Medicine.human_attribute_name(:dosage)
+      %th= Medicine.human_attribute_name(:quantity_or_volume)
+      %th= Medicine.human_attribute_name(:manufacturer)
+      %th= Medicine.human_attribute_name(:need_recipe)
+      %th= Medicine.human_attribute_name(:price)
+      %th= Medicine.human_attribute_name(:category)
+      %th.p50
+      %th.p50
+      %th.p50
+
+  %tbody
+    - @medicines.each do |medicine|
+      %tr
+        %td= medicine.medicine_name
+        %td= medicine.dosage
+        %td= medicine.quantity_or_volume
+        %td= medicine.manufacturer
+        %td= medicine.need_recipe
+        %td= medicine.price
+        %td= medicine.category.try(:category_name)
+        %td
+          = link_to medicine, class: 'btn btn-success' do
+            = fa_icon :eye
+        %td
+          = link_to edit_medicine_path(medicine), class: 'btn btn-info' do
+            = fa_icon :edit
+        %td
+          = link_to medicine, :method => :delete, :data => { :confirm => t('helpers.sure') }, class: 'btn btn-danger' do
+            = fa_icon :times
+
+
+

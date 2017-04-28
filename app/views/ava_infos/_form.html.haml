@@ -1,0 +1,25 @@
+= form_for @ava_info do |f|
+  = error_messages_for @ava_info
+
+  .row
+    .col-md-8
+      .form-group
+        = f.label :pharmacy
+        %br
+        = f.select(:pharmacy_id , options_for_select(pharmacy_for_select(), ), {include_blank: true})
+        = f.error_messages_for(:pharmacy_id)
+  .row
+    .col-md-8
+      .form-group
+        = f.label :medicine
+        %br
+        = f.select(:medicine_id , options_for_select(medicine_for_select(), ), {include_blank: true})
+        = f.error_messages_for(:medicine_id)
+  .row
+    .col-md-8
+      .form-group
+        = f.label :quantity
+        = f.number_field :quantity, class: 'form-control'
+        = f.error_messages_for(:quantity)
+  .form-actions
+    = f.submit nil, class: 'btn btn-primary'

@@ -1,0 +1,11 @@
+= form_for @category do |f|
+  = error_messages_for @category
+
+  .row
+    .col-md-8
+      .form-group
+        = f.label :category_name
+        = f.text_field :category_name, class: 'form-control'
+        = f.error_messages_for(:category_name)
+  .form-actions
+    = f.submit nil, class: 'btn btn-primary'

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  adress: MyText
+  number: 1
+  nearest_metro: MyText
+
+two:
+  adress: MyText
+  number: 1
+  nearest_metro: MyText

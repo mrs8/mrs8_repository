@@ -1,0 +1,38 @@
+=breadcrumb_tag do
+  %li.active
+    Информация о наличии лекарств
+  %li
+    Администрирование
+
+
+%h1= t('app.ava_infos.index')
+
+%table.table.table-hover.table-striped.center
+  %caption
+    .pull-right
+      = link_to t('app.ava_infos.new-button'), new_ava_info_path, class: 'btn btn-primary'
+  %thead
+    %tr
+      %th= AvaInfo.human_attribute_name(:pharmacy)
+      %th= AvaInfo.human_attribute_name(:medicine)
+      %th= AvaInfo.human_attribute_name(:quantity)
+      %th.p50
+      %th.p50
+      %th.p50
+
+  %tbody
+    - @ava_infos.each do |ava_info|
+      %tr
+        %td= ava_info.pharmacy.try(:number)
+        %td= ava_info.medicine.try(:medicine_name)
+        %td= ava_info.quantity
+        %td
+          = link_to ava_info, class: 'btn btn-success' do
+            = fa_icon :eye
+        %td
+          = link_to edit_ava_info_path(ava_info), class: 'btn btn-info' do
+            = fa_icon :edit
+        %td
+          = link_to ava_info, :method => :delete, :data => { :confirm => t('helpers.sure') }, class: 'btn btn-danger' do
+            = fa_icon :times
+
