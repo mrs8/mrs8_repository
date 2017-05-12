@@ -19224,3 +19224,725 @@ Completed 200 OK in 323ms (Views: 278.8ms | ActiveRecord: 27.4ms)
 
 
 Started GET "/assets/favicon-9fb30ab423ede0570894e6820d5b3a598b4a1dbbc9471a98f4d6b42cbe696bd7.ico" for ::1 at 2017-04-28 16:14:56 +0300
+  [1m[36mSQL (0.5ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (11.7ms)[0m  CREATE TABLE "ava_infos" ("id" serial primary key, "pharmacy_id" integer NOT NULL, "medicine_id" integer NOT NULL, "quantity" integer NOT NULL, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (10.2ms)[0m  [1mCREATE  INDEX  "index_ava_infos_on_medicine_id" ON "ava_infos" USING btree ("medicine_id")[0m
+  [1m[35m (6.5ms)[0m  CREATE UNIQUE INDEX  "index_ava_infos_on_pharmacy_id_and_medicine_id" ON "ava_infos" USING btree ("pharmacy_id", "medicine_id")
+  [1m[36m (5.3ms)[0m  [1mCREATE  INDEX  "index_ava_infos_on_pharmacy_id" ON "ava_infos" USING btree ("pharmacy_id")[0m
+  [1m[35m (14.7ms)[0m  CREATE TABLE "categories" ("id" serial primary key, "category_name" text NOT NULL, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (9.6ms)[0m  [1mCREATE UNIQUE INDEX  "index_categories_on_category_name" ON "categories" USING btree ("category_name")[0m
+  [1m[35m (10.2ms)[0m  CREATE TABLE "delayed_jobs" ("id" serial primary key, "priority" integer DEFAULT 0 NOT NULL, "attempts" integer DEFAULT 0 NOT NULL, "handler" text NOT NULL, "last_error" text, "run_at" timestamp, "locked_at" timestamp, "failed_at" timestamp, "locked_by" character varying, "queue" character varying, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (3.9ms)[0m  [1mCREATE  INDEX  "delayed_jobs_priority" ON "delayed_jobs" USING btree ("priority", "run_at")[0m
+  [1m[35m (11.3ms)[0m  CREATE TABLE "medicines" ("id" serial primary key, "medicine_name" text NOT NULL, "dosage" float NOT NULL, "quantity_or_volume" float NOT NULL, "manufacturer" text NOT NULL, "need_recipe" character varying NOT NULL, "price" float NOT NULL, "category_id" integer NOT NULL, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (7.3ms)[0m  [1mCREATE  INDEX  "index_medicines_on_category_id" ON "medicines" USING btree ("category_id")[0m
+  [1m[35m (13.9ms)[0m  CREATE TABLE "pharmacies" ("id" serial primary key, "adress" text NOT NULL, "number" integer NOT NULL, "nearest_metro" text NOT NULL, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (5.8ms)[0m  [1mCREATE UNIQUE INDEX  "index_pharmacies_on_adress_and_number_and_nearest_metro" ON "pharmacies" USING btree ("adress", "number", "nearest_metro")[0m
+  [1m[35m (9.7ms)[0m  CREATE TABLE "role_users" ("id" serial primary key, "role_id" integer NOT NULL, "user_id" integer NOT NULL, "data" json, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (4.5ms)[0m  [1mCREATE  INDEX  "index_role_users_on_role_id" ON "role_users" USING btree ("role_id")[0m
+  [1m[35m (17.5ms)[0m  CREATE  INDEX  "index_role_users_on_user_id" ON "role_users" USING btree ("user_id")
+  [1m[36m (10.3ms)[0m  [1mCREATE TABLE "roles" ("id" serial primary key, "name" character varying NOT NULL, "info" character varying NOT NULL, "full_info" text NOT NULL, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) [0m
+  [1m[35m (10.9ms)[0m  CREATE UNIQUE INDEX  "index_roles_on_info" ON "roles" USING btree ("info")
+  [1m[36m (4.8ms)[0m  [1mCREATE UNIQUE INDEX  "index_roles_on_name" ON "roles" USING btree ("name")[0m
+  [1m[35m (10.3ms)[0m  CREATE TABLE "users" ("id" serial primary key, "email" character varying NOT NULL, "crypted_password" character varying, "salt" character varying, "created_at" timestamp, "updated_at" timestamp, "remember_me_token" character varying, "remember_me_token_expires_at" timestamp, "reset_password_token" character varying, "reset_password_token_expires_at" timestamp, "reset_password_email_sent_at" timestamp, "activation_state" character varying, "activation_token" character varying, "activation_token_expires_at" timestamp, "failed_logins_count" integer DEFAULT 0, "lock_expires_at" timestamp, "unlock_token" character varying, "last_login_at" timestamp, "last_logout_at" timestamp, "last_activity_at" timestamp, "last_login_from_ip_address" character varying) 
+  [1m[36m (4.9ms)[0m  [1mCREATE  INDEX  "index_users_on_activation_token" ON "users" USING btree ("activation_token")[0m
+  [1m[35m (4.6ms)[0m  CREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")
+  [1m[36m (5.5ms)[0m  [1mCREATE  INDEX  "index_users_on_last_logout_at_and_last_activity_at" ON "users" USING btree ("last_logout_at", "last_activity_at")[0m
+  [1m[35m (6.1ms)[0m  CREATE  INDEX  "index_users_on_remember_me_token" ON "users" USING btree ("remember_me_token")
+  [1m[36m (9.7ms)[0m  [1mCREATE  INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")[0m
+  [1m[35m (7.9ms)[0m  CREATE  INDEX  "index_users_on_unlock_token" ON "users" USING btree ("unlock_token")
+  [1m[36m (15.8ms)[0m  [1mCREATE TABLE "versions" ("id" serial primary key, "item_type" character varying NOT NULL, "item_id" integer NOT NULL, "event" character varying NOT NULL, "whodunnit" character varying, "object" text, "created_at" timestamp) [0m
+  [1m[35m (4.1ms)[0m  CREATE  INDEX  "index_versions_on_item_type_and_item_id" ON "versions" USING btree ("item_type", "item_id")
+  [1m[36m (3.8ms)[0m  [1mALTER TABLE "ava_infos" ADD CONSTRAINT "fk_rails_2f46dcf321"
+FOREIGN KEY ("medicine_id")
+  REFERENCES "medicines" ("id")
+[0m
+  [1m[35m (3.8ms)[0m  ALTER TABLE "ava_infos" ADD CONSTRAINT "fk_rails_67b3615ecf"
+FOREIGN KEY ("pharmacy_id")
+  REFERENCES "pharmacies" ("id")
+
+  [1m[36m (8.6ms)[0m  [1mALTER TABLE "medicines" ADD CONSTRAINT "fk_rails_9a0c85f9a0"
+FOREIGN KEY ("category_id")
+  REFERENCES "categories" ("id")
+[0m
+  [1m[35m (3.8ms)[0m  ALTER TABLE "role_users" ADD CONSTRAINT "fk_rails_d517f3214f"
+FOREIGN KEY ("role_id")
+  REFERENCES "roles" ("id")
+
+  [1m[36m (7.9ms)[0m  [1mALTER TABLE "role_users" ADD CONSTRAINT "fk_rails_d225876829"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (7.9ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (5.8ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.5ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (1.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170427051014')[0m
+  [1m[35m (1.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151203152020')
+  [1m[36m (1.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170409205031')[0m
+  [1m[35m (3.0ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151204090520')
+  [1m[36m (1.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170409204945')[0m
+  [1m[35m (1.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151204090519')
+  [1m[36m (1.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170427050932')[0m
+  [1m[35m (1.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151204090516')
+  [1m[36m (3.1ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170427050944')[0m
+  [1m[35m (3.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151203154714')
+  [1m[36m (1.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20151204090517')[0m
+  [1m[35m (1.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151204090518')
+  [1m[36m (1.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170427051002')[0m
+  [1m[35m (1.2ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151204090515')
+  [1m[36mSQL (0.6ms)[0m  [1mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (28.7ms)[0m  CREATE TABLE "ava_infos" ("id" serial primary key, "pharmacy_id" integer NOT NULL, "medicine_id" integer NOT NULL, "quantity" integer NOT NULL, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (4.7ms)[0m  [1mCREATE  INDEX  "index_ava_infos_on_medicine_id" ON "ava_infos" USING btree ("medicine_id")[0m
+  [1m[35m (6.0ms)[0m  CREATE UNIQUE INDEX  "index_ava_infos_on_pharmacy_id_and_medicine_id" ON "ava_infos" USING btree ("pharmacy_id", "medicine_id")
+  [1m[36m (12.1ms)[0m  [1mCREATE  INDEX  "index_ava_infos_on_pharmacy_id" ON "ava_infos" USING btree ("pharmacy_id")[0m
+  [1m[35m (9.9ms)[0m  CREATE TABLE "categories" ("id" serial primary key, "category_name" text NOT NULL, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (4.7ms)[0m  [1mCREATE UNIQUE INDEX  "index_categories_on_category_name" ON "categories" USING btree ("category_name")[0m
+  [1m[35m (15.6ms)[0m  CREATE TABLE "delayed_jobs" ("id" serial primary key, "priority" integer DEFAULT 0 NOT NULL, "attempts" integer DEFAULT 0 NOT NULL, "handler" text NOT NULL, "last_error" text, "run_at" timestamp, "locked_at" timestamp, "failed_at" timestamp, "locked_by" character varying, "queue" character varying, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (4.8ms)[0m  [1mCREATE  INDEX  "delayed_jobs_priority" ON "delayed_jobs" USING btree ("priority", "run_at")[0m
+  [1m[35m (10.7ms)[0m  CREATE TABLE "medicines" ("id" serial primary key, "medicine_name" text NOT NULL, "dosage" float NOT NULL, "quantity_or_volume" float NOT NULL, "manufacturer" text NOT NULL, "need_recipe" character varying NOT NULL, "price" float NOT NULL, "category_id" integer NOT NULL, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (4.8ms)[0m  [1mCREATE  INDEX  "index_medicines_on_category_id" ON "medicines" USING btree ("category_id")[0m
+  [1m[35m (19.0ms)[0m  CREATE TABLE "pharmacies" ("id" serial primary key, "adress" text NOT NULL, "number" integer NOT NULL, "nearest_metro" text NOT NULL, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (6.4ms)[0m  [1mCREATE UNIQUE INDEX  "index_pharmacies_on_adress_and_number_and_nearest_metro" ON "pharmacies" USING btree ("adress", "number", "nearest_metro")[0m
+  [1m[35m (9.4ms)[0m  CREATE TABLE "role_users" ("id" serial primary key, "role_id" integer NOT NULL, "user_id" integer NOT NULL, "data" json, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) 
+  [1m[36m (12.9ms)[0m  [1mCREATE  INDEX  "index_role_users_on_role_id" ON "role_users" USING btree ("role_id")[0m
+  [1m[35m (6.1ms)[0m  CREATE  INDEX  "index_role_users_on_user_id" ON "role_users" USING btree ("user_id")
+  [1m[36m (9.1ms)[0m  [1mCREATE TABLE "roles" ("id" serial primary key, "name" character varying NOT NULL, "info" character varying NOT NULL, "full_info" text NOT NULL, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL) [0m
+  [1m[35m (25.7ms)[0m  CREATE UNIQUE INDEX  "index_roles_on_info" ON "roles" USING btree ("info")
+  [1m[36m (4.6ms)[0m  [1mCREATE UNIQUE INDEX  "index_roles_on_name" ON "roles" USING btree ("name")[0m
+  [1m[35m (13.0ms)[0m  CREATE TABLE "users" ("id" serial primary key, "email" character varying NOT NULL, "crypted_password" character varying, "salt" character varying, "created_at" timestamp, "updated_at" timestamp, "remember_me_token" character varying, "remember_me_token_expires_at" timestamp, "reset_password_token" character varying, "reset_password_token_expires_at" timestamp, "reset_password_email_sent_at" timestamp, "activation_state" character varying, "activation_token" character varying, "activation_token_expires_at" timestamp, "failed_logins_count" integer DEFAULT 0, "lock_expires_at" timestamp, "unlock_token" character varying, "last_login_at" timestamp, "last_logout_at" timestamp, "last_activity_at" timestamp, "last_login_from_ip_address" character varying) 
+  [1m[36m (4.8ms)[0m  [1mCREATE  INDEX  "index_users_on_activation_token" ON "users" USING btree ("activation_token")[0m
+  [1m[35m (4.4ms)[0m  CREATE UNIQUE INDEX  "index_users_on_email" ON "users" USING btree ("email")
+  [1m[36m (12.7ms)[0m  [1mCREATE  INDEX  "index_users_on_last_logout_at_and_last_activity_at" ON "users" USING btree ("last_logout_at", "last_activity_at")[0m
+  [1m[35m (4.9ms)[0m  CREATE  INDEX  "index_users_on_remember_me_token" ON "users" USING btree ("remember_me_token")
+  [1m[36m (4.0ms)[0m  [1mCREATE  INDEX  "index_users_on_reset_password_token" ON "users" USING btree ("reset_password_token")[0m
+  [1m[35m (6.0ms)[0m  CREATE  INDEX  "index_users_on_unlock_token" ON "users" USING btree ("unlock_token")
+  [1m[36m (15.4ms)[0m  [1mCREATE TABLE "versions" ("id" serial primary key, "item_type" character varying NOT NULL, "item_id" integer NOT NULL, "event" character varying NOT NULL, "whodunnit" character varying, "object" text, "created_at" timestamp) [0m
+  [1m[35m (5.2ms)[0m  CREATE  INDEX  "index_versions_on_item_type_and_item_id" ON "versions" USING btree ("item_type", "item_id")
+  [1m[36m (4.8ms)[0m  [1mALTER TABLE "ava_infos" ADD CONSTRAINT "fk_rails_2f46dcf321"
+FOREIGN KEY ("medicine_id")
+  REFERENCES "medicines" ("id")
+[0m
+  [1m[35m (6.9ms)[0m  ALTER TABLE "ava_infos" ADD CONSTRAINT "fk_rails_67b3615ecf"
+FOREIGN KEY ("pharmacy_id")
+  REFERENCES "pharmacies" ("id")
+
+  [1m[36m (5.4ms)[0m  [1mALTER TABLE "medicines" ADD CONSTRAINT "fk_rails_9a0c85f9a0"
+FOREIGN KEY ("category_id")
+  REFERENCES "categories" ("id")
+[0m
+  [1m[35m (3.2ms)[0m  ALTER TABLE "role_users" ADD CONSTRAINT "fk_rails_d517f3214f"
+FOREIGN KEY ("role_id")
+  REFERENCES "roles" ("id")
+
+  [1m[36m (29.0ms)[0m  [1mALTER TABLE "role_users" ADD CONSTRAINT "fk_rails_d225876829"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (6.7ms)[0m  CREATE TABLE "schema_migrations" ("version" character varying NOT NULL) 
+  [1m[36m (12.2ms)[0m  [1mCREATE UNIQUE INDEX  "unique_schema_migrations" ON "schema_migrations"  ("version")[0m
+  [1m[35m (0.5ms)[0m  SELECT version FROM "schema_migrations"
+  [1m[36m (1.8ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170427051014')[0m
+  [1m[35m (2.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151203152020')
+  [1m[36m (1.7ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170409205031')[0m
+  [1m[35m (1.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151204090520')
+  [1m[36m (1.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170409204945')[0m
+  [1m[35m (1.5ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151204090519')
+  [1m[36m (1.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170427050932')[0m
+  [1m[35m (1.4ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151204090516')
+  [1m[36m (1.5ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170427050944')[0m
+  [1m[35m (1.8ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151203154714')
+  [1m[36m (1.3ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20151204090517')[0m
+  [1m[35m (3.0ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151204090518')
+  [1m[36m (1.4ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20170427051002')[0m
+  [1m[35m (1.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20151204090515')
+  [1m[36mActiveRecord::SchemaMigration Load (2.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35mUser Load (0.7ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1 LIMIT 1  [["email", "admin@localhost"]]
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Exists (0.7ms)[0m  SELECT  1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER('admin@localhost') LIMIT 1
+  [1m[36mSQL (1.9ms)[0m  [1mINSERT INTO "users" ("email", "salt", "crypted_password", "created_at", "updated_at", "activation_token", "activation_state") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["email", "admin@localhost"], ["salt", "xqguJadvRVxVwgpetxwX"], ["crypted_password", "$2a$10$y7p0DO7ld1IJA96cw4MWuuBmJldLsEsr/krraMFMhMRHePm8IXfjS"], ["created_at", "2017-04-28 14:57:14.943136"], ["updated_at", "2017-04-28 14:57:14.943136"], ["activation_token", "M2434WquqzCn_Ebq-G8E"], ["activation_state", "pending"]]
+  Rendered user_mailer/activation_needed_email.html.haml within layouts/mailer (1.8ms)
+  Rendered user_mailer/activation_needed_email.text.haml within layouts/mailer (1.6ms)
+
+UserMailer#activation_needed_email: processed outbound mail in 156.8ms
+
+Sent mail to admin@localhost (123.0ms)
+Date: Fri, 28 Apr 2017 17:57:15 +0300
+From: from@example.com
+To: admin@localhost
+Message-ID: <5903584b1ae0f_ceb48f6cd26398a@mypc.mail>
+Subject: Welcome to My Awesome Site
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="--==_mimepart_5903584b18fe4_ceb48f6cd2638b8";
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+
+----==_mimepart_5903584b18fe4_ceb48f6cd2638b8
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Welcome to example.com,
+admin@localhost
+You have successfully signed up to example.com,
+your username is:
+admin@localhost.
+To login to the site, just follow this link:
+http://localhost:3000/users/M2434WquqzCn_Ebq-G8E/activate.
+Thanks for joining and have a great day!
+
+----==_mimepart_5903584b18fe4_ceb48f6cd2638b8
+Content-Type: text/html;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<hmtl>
+  <body>
+    Welcome to example.com,
+    admin@localhost
+    You have successfully signed up to example.com,
+    your username is:
+    admin@localhost.
+    To login to the site, just follow this link:
+    http://localhost:3000/users/M2434WquqzCn_Ebq-G8E/activate.
+    Thanks for joining and have a great day!
+  </body>
+</hmtl>
+
+----==_mimepart_5903584b18fe4_ceb48f6cd2638b8--
+
+  [1m[35m (2.7ms)[0m  COMMIT
+DEPRECATION WARNING: The method `login_path` cannot be used here as a full URL is required. Use `login_url` instead. (called from activation_success_email at /home/rus/gitpro/gittest/mrs8_repository/app/mailers/user_mailer.rb:11)
+  Rendered user_mailer/activation_success_email.html.haml within layouts/mailer (1.1ms)
+  Rendered user_mailer/activation_success_email.text.haml within layouts/mailer (4.7ms)
+
+UserMailer#activation_success_email: processed outbound mail in 23.2ms
+
+Sent mail to admin@localhost (88.6ms)
+Date: Fri, 28 Apr 2017 17:57:15 +0300
+From: from@example.com
+To: admin@localhost
+Message-ID: <5903584b402a4_ceb48f6cd264193@mypc.mail>
+Subject: Your account is now activated
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="--==_mimepart_5903584b3df74_ceb48f6cd264068";
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+
+----==_mimepart_5903584b3df74_ceb48f6cd264068
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Congratz,
+admin@localhost
+You have successfully activated your example.com account,
+your username is:
+admin@localhost.
+To login to the site, just follow this link:
+/login.
+Thanks for joining and have a great day!
+
+----==_mimepart_5903584b3df74_ceb48f6cd264068
+Content-Type: text/html;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<hmtl>
+  <body>
+    Congratz,
+    admin@localhost
+    You have successfully activated your example.com account,
+    your username is:
+    admin@localhost.
+    To login to the site, just follow this link:
+    /login.
+    Thanks for joining and have a great day!
+  </body>
+</hmtl>
+
+----==_mimepart_5903584b3df74_ceb48f6cd264068--
+
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.6ms)[0m  UPDATE "users" SET "activation_token" = $1, "activation_state" = $2, "updated_at" = $3 WHERE "users"."id" = $4  [["activation_token", nil], ["activation_state", "active"], ["updated_at", "2017-04-28 14:57:15.345016"], ["id", 1]]
+  [1m[36m (1.5ms)[0m  [1mCOMMIT[0m
+  [1m[35mUser Load (0.4ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1 LIMIT 1  [["email", "user@localhost"]]
+  [1m[36m (6.4ms)[0m  [1mBEGIN[0m
+  [1m[35mUser Exists (0.8ms)[0m  SELECT  1 AS one FROM "users" WHERE LOWER("users"."email") = LOWER('user@localhost') LIMIT 1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "users" ("email", "salt", "crypted_password", "created_at", "updated_at", "activation_token", "activation_state") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["email", "user@localhost"], ["salt", "xbs5M2cVLRt-4z9eQztb"], ["crypted_password", "$2a$10$py96MYqhcD2XzxjxOrKUdurp2RCOtNNlvlUPg9Pj0Nfp0cYweC79u"], ["created_at", "2017-04-28 14:57:15.552340"], ["updated_at", "2017-04-28 14:57:15.552340"], ["activation_token", "ygRg63764DB_p_aGsu8u"], ["activation_state", "pending"]]
+  Rendered user_mailer/activation_needed_email.html.haml within layouts/mailer (0.1ms)
+  Rendered user_mailer/activation_needed_email.text.haml within layouts/mailer (0.1ms)
+
+UserMailer#activation_needed_email: processed outbound mail in 8.8ms
+
+Sent mail to user@localhost (85.0ms)
+Date: Fri, 28 Apr 2017 17:57:15 +0300
+From: from@example.com
+To: user@localhost
+Message-ID: <5903584b8aab7_ceb48f6cd2643ca@mypc.mail>
+Subject: Welcome to My Awesome Site
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="--==_mimepart_5903584b8905e_ceb48f6cd2642f7";
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+
+----==_mimepart_5903584b8905e_ceb48f6cd2642f7
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Welcome to example.com,
+user@localhost
+You have successfully signed up to example.com,
+your username is:
+user@localhost.
+To login to the site, just follow this link:
+http://localhost:3000/users/ygRg63764DB_p_aGsu8u/activate.
+Thanks for joining and have a great day!
+
+----==_mimepart_5903584b8905e_ceb48f6cd2642f7
+Content-Type: text/html;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<hmtl>
+  <body>
+    Welcome to example.com,
+    user@localhost
+    You have successfully signed up to example.com,
+    your username is:
+    user@localhost.
+    To login to the site, just follow this link:
+    http://localhost:3000/users/ygRg63764DB_p_aGsu8u/activate.
+    Thanks for joining and have a great day!
+  </body>
+</hmtl>
+
+----==_mimepart_5903584b8905e_ceb48f6cd2642f7--
+
+  [1m[35m (2.1ms)[0m  COMMIT
+DEPRECATION WARNING: The method `login_path` cannot be used here as a full URL is required. Use `login_url` instead. (called from activation_success_email at /home/rus/gitpro/gittest/mrs8_repository/app/mailers/user_mailer.rb:11)
+  Rendered user_mailer/activation_success_email.html.haml within layouts/mailer (0.1ms)
+  Rendered user_mailer/activation_success_email.text.haml within layouts/mailer (0.1ms)
+
+UserMailer#activation_success_email: processed outbound mail in 14.9ms
+
+Sent mail to user@localhost (82.5ms)
+Date: Fri, 28 Apr 2017 17:57:15 +0300
+From: from@example.com
+To: user@localhost
+Message-ID: <5903584ba6037_ceb48f6cd264566@mypc.mail>
+Subject: Your account is now activated
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="--==_mimepart_5903584ba2cf7_ceb48f6cd26441";
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+
+----==_mimepart_5903584ba2cf7_ceb48f6cd26441
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Congratz,
+user@localhost
+You have successfully activated your example.com account,
+your username is:
+user@localhost.
+To login to the site, just follow this link:
+/login.
+Thanks for joining and have a great day!
+
+----==_mimepart_5903584ba2cf7_ceb48f6cd26441
+Content-Type: text/html;
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<hmtl>
+  <body>
+    Congratz,
+    user@localhost
+    You have successfully activated your example.com account,
+    your username is:
+    user@localhost.
+    To login to the site, just follow this link:
+    /login.
+    Thanks for joining and have a great day!
+  </body>
+</hmtl>
+
+----==_mimepart_5903584ba2cf7_ceb48f6cd26441--
+
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.5ms)[0m  UPDATE "users" SET "activation_token" = $1, "activation_state" = $2, "updated_at" = $3 WHERE "users"."id" = $4  [["activation_token", nil], ["activation_state", "active"], ["updated_at", "2017-04-28 14:57:15.761874"], ["id", 2]]
+  [1m[36m (1.8ms)[0m  [1mCOMMIT[0m
+  [1m[35mRole Load (0.5ms)[0m  SELECT  "roles".* FROM "roles" WHERE "roles"."name" = $1 AND "roles"."info" = $2 AND "roles"."full_info" = $3 LIMIT 1  [["name", "admin"], ["info", "Администратор"], ["full_info", "Администратор системы"]]
+  [1m[36m (8.1ms)[0m  [1mBEGIN[0m
+  [1m[35mRole Exists (0.5ms)[0m  SELECT  1 AS one FROM "roles" WHERE "roles"."name" = 'admin' LIMIT 1
+  [1m[36mRole Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "roles" WHERE "roles"."info" = 'Администратор' LIMIT 1[0m
+  [1m[35mSQL (1.2ms)[0m  INSERT INTO "roles" ("name", "info", "full_info", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "admin"], ["info", "Администратор"], ["full_info", "Администратор системы"], ["created_at", "2017-04-28 14:57:15.791880"], ["updated_at", "2017-04-28 14:57:15.791880"]]
+  [1m[36m (14.0ms)[0m  [1mCOMMIT[0m
+  [1m[35mRole Load (0.4ms)[0m  SELECT  "roles".* FROM "roles" WHERE "roles"."name" = $1 AND "roles"."info" = $2 AND "roles"."full_info" = $3 LIMIT 1  [["name", "operator"], ["info", "Оператор"], ["full_info", "Оператор"]]
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mRole Exists (0.3ms)[0m  SELECT  1 AS one FROM "roles" WHERE "roles"."name" = 'operator' LIMIT 1
+  [1m[36mRole Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "roles" WHERE "roles"."info" = 'Оператор' LIMIT 1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "roles" ("name", "info", "full_info", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "operator"], ["info", "Оператор"], ["full_info", "Оператор"], ["created_at", "2017-04-28 14:57:15.811111"], ["updated_at", "2017-04-28 14:57:15.811111"]]
+  [1m[36m (3.7ms)[0m  [1mCOMMIT[0m
+  [1m[35m (0.7ms)[0m  BEGIN
+  [1m[36mSQL (1.1ms)[0m  [1mINSERT INTO "role_users" ("role_id", "user_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["role_id", 1], ["user_id", 1], ["created_at", "2017-04-28 14:57:15.840585"], ["updated_at", "2017-04-28 14:57:15.840585"]]
+  [1m[35m (1.8ms)[0m  COMMIT
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "role_users" ("role_id", "user_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"  [["role_id", 2], ["user_id", 2], ["created_at", "2017-04-28 14:57:15.845472"], ["updated_at", "2017-04-28 14:57:15.845472"]]
+  [1m[36m (2.2ms)[0m  [1mCOMMIT[0m
+  [1m[35mPharmacy Load (0.4ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."adress" = $1 AND "pharmacies"."number" = $2 AND "pharmacies"."nearest_metro" = $3 LIMIT 1  [["adress", "Улица Ленина дом 1"], ["number", 1], ["nearest_metro", "Пионерская"]]
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mPharmacy Exists (0.4ms)[0m  SELECT  1 AS one FROM "pharmacies" WHERE ("pharmacies"."adress" = 'Улица Ленина дом 1' AND "pharmacies"."number" = 1 AND "pharmacies"."nearest_metro" = 'Пионерская') LIMIT 1
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO "pharmacies" ("adress", "number", "nearest_metro", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["adress", "Улица Ленина дом 1"], ["number", 1], ["nearest_metro", "Пионерская"], ["created_at", "2017-04-28 14:57:15.860638"], ["updated_at", "2017-04-28 14:57:15.860638"]]
+  [1m[35m (21.7ms)[0m  COMMIT
+  [1m[36mPharmacy Load (0.3ms)[0m  [1mSELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."adress" = $1 AND "pharmacies"."number" = $2 AND "pharmacies"."nearest_metro" = $3 LIMIT 1[0m  [["adress", "Заветная улица дом 14"], ["number", 2], ["nearest_metro", "Багратионовская"]]
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mPharmacy Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "pharmacies" WHERE ("pharmacies"."adress" = 'Заветная улица дом 14' AND "pharmacies"."number" = 2 AND "pharmacies"."nearest_metro" = 'Багратионовская') LIMIT 1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "pharmacies" ("adress", "number", "nearest_metro", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["adress", "Заветная улица дом 14"], ["number", 2], ["nearest_metro", "Багратионовская"], ["created_at", "2017-04-28 14:57:15.886387"], ["updated_at", "2017-04-28 14:57:15.886387"]]
+  [1m[36m (3.6ms)[0m  [1mCOMMIT[0m
+  [1m[35mPharmacy Load (0.3ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."adress" = $1 AND "pharmacies"."number" = $2 AND "pharmacies"."nearest_metro" = $3 LIMIT 1  [["adress", "Заводской переулок дом 5"], ["number", 3], ["nearest_metro", "Фили"]]
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mPharmacy Exists (0.3ms)[0m  SELECT  1 AS one FROM "pharmacies" WHERE ("pharmacies"."adress" = 'Заводской переулок дом 5' AND "pharmacies"."number" = 3 AND "pharmacies"."nearest_metro" = 'Фили') LIMIT 1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "pharmacies" ("adress", "number", "nearest_metro", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["adress", "Заводской переулок дом 5"], ["number", 3], ["nearest_metro", "Фили"], ["created_at", "2017-04-28 14:57:15.892931"], ["updated_at", "2017-04-28 14:57:15.892931"]]
+  [1m[35m (1.6ms)[0m  COMMIT
+  [1m[36mPharmacy Load (0.3ms)[0m  [1mSELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."adress" = $1 AND "pharmacies"."number" = $2 AND "pharmacies"."nearest_metro" = $3 LIMIT 1[0m  [["adress", "Дубнинская улица дом 65"], ["number", 4], ["nearest_metro", "Кожуховская"]]
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mPharmacy Exists (0.1ms)[0m  [1mSELECT  1 AS one FROM "pharmacies" WHERE ("pharmacies"."adress" = 'Дубнинская улица дом 65' AND "pharmacies"."number" = 4 AND "pharmacies"."nearest_metro" = 'Кожуховская') LIMIT 1[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "pharmacies" ("adress", "number", "nearest_metro", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["adress", "Дубнинская улица дом 65"], ["number", 4], ["nearest_metro", "Кожуховская"], ["created_at", "2017-04-28 14:57:15.897661"], ["updated_at", "2017-04-28 14:57:15.897661"]]
+  [1m[36m (1.5ms)[0m  [1mCOMMIT[0m
+  [1m[35mPharmacy Load (0.3ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."adress" = $1 AND "pharmacies"."number" = $2 AND "pharmacies"."nearest_metro" = $3 LIMIT 1  [["adress", "Кожуховская улица  дом 35"], ["number", 5], ["nearest_metro", "Курская"]]
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mPharmacy Exists (0.3ms)[0m  SELECT  1 AS one FROM "pharmacies" WHERE ("pharmacies"."adress" = 'Кожуховская улица  дом 35' AND "pharmacies"."number" = 5 AND "pharmacies"."nearest_metro" = 'Курская') LIMIT 1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "pharmacies" ("adress", "number", "nearest_metro", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["adress", "Кожуховская улица  дом 35"], ["number", 5], ["nearest_metro", "Курская"], ["created_at", "2017-04-28 14:57:15.902201"], ["updated_at", "2017-04-28 14:57:15.902201"]]
+  [1m[35m (1.4ms)[0m  COMMIT
+  [1m[36mCategory Load (0.4ms)[0m  [1mSELECT  "categories".* FROM "categories" WHERE "categories"."category_name" = $1 LIMIT 1[0m  [["category_name", "Категория A"]]
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mCategory Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "categories" WHERE "categories"."category_name" = 'Категория A' LIMIT 1[0m
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "categories" ("category_name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["category_name", "Категория A"], ["created_at", "2017-04-28 14:57:15.914106"], ["updated_at", "2017-04-28 14:57:15.914106"]]
+  [1m[36m (10.7ms)[0m  [1mCOMMIT[0m
+  [1m[35mCategory Load (0.3ms)[0m  SELECT  "categories".* FROM "categories" WHERE "categories"."category_name" = $1 LIMIT 1  [["category_name", "Категория B"]]
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mCategory Exists (0.3ms)[0m  SELECT  1 AS one FROM "categories" WHERE "categories"."category_name" = 'Категория B' LIMIT 1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "categories" ("category_name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["category_name", "Категория B"], ["created_at", "2017-04-28 14:57:15.928739"], ["updated_at", "2017-04-28 14:57:15.928739"]]
+  [1m[35m (7.7ms)[0m  COMMIT
+  [1m[36mCategory Load (0.3ms)[0m  [1mSELECT  "categories".* FROM "categories" WHERE "categories"."category_name" = $1 LIMIT 1[0m  [["category_name", "Категория C"]]
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36mCategory Exists (0.3ms)[0m  [1mSELECT  1 AS one FROM "categories" WHERE "categories"."category_name" = 'Категория C' LIMIT 1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "categories" ("category_name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["category_name", "Категория C"], ["created_at", "2017-04-28 14:57:15.939184"], ["updated_at", "2017-04-28 14:57:15.939184"]]
+  [1m[36m (17.7ms)[0m  [1mCOMMIT[0m
+  [1m[35mCategory Load (0.3ms)[0m  SELECT  "categories".* FROM "categories" WHERE "categories"."category_name" = $1 LIMIT 1  [["category_name", "Категория D"]]
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35mCategory Exists (0.3ms)[0m  SELECT  1 AS one FROM "categories" WHERE "categories"."category_name" = 'Категория D' LIMIT 1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "categories" ("category_name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["category_name", "Категория D"], ["created_at", "2017-04-28 14:57:15.959900"], ["updated_at", "2017-04-28 14:57:15.959900"]]
+  [1m[35m (1.6ms)[0m  COMMIT
+  [1m[36mCategory Load (0.4ms)[0m  [1mSELECT  "categories".* FROM "categories" WHERE "categories"."category_name" = $1 LIMIT 1[0m  [["category_name", "Категория X"]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mCategory Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "categories" WHERE "categories"."category_name" = 'Категория X' LIMIT 1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "categories" ("category_name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"  [["category_name", "Категория X"], ["created_at", "2017-04-28 14:57:15.964687"], ["updated_at", "2017-04-28 14:57:15.964687"]]
+  [1m[36m (1.8ms)[0m  [1mCOMMIT[0m
+  [1m[35mCategory Load (0.4ms)[0m  SELECT  "categories".* FROM "categories" WHERE "categories"."category_name" = $1 LIMIT 1  [["category_name", "Категория N"]]
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mCategory Exists (0.4ms)[0m  SELECT  1 AS one FROM "categories" WHERE "categories"."category_name" = 'Категория N' LIMIT 1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "categories" ("category_name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["category_name", "Категория N"], ["created_at", "2017-04-28 14:57:15.969601"], ["updated_at", "2017-04-28 14:57:15.969601"]]
+  [1m[35m (1.7ms)[0m  COMMIT
+  [1m[36mMedicine Load (0.5ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."medicine_name" = $1 AND "medicines"."dosage" = $2 AND "medicines"."quantity_or_volume" = $3 AND "medicines"."manufacturer" = $4 AND "medicines"."need_recipe" = $5 AND "medicines"."price" = $6 AND "medicines"."category_id" = 1 LIMIT 1[0m  [["medicine_name", "Амоксициллин"], ["dosage", 1.0], ["quantity_or_volume", 10.0], ["manufacturer", "Биотэк"], ["need_recipe", "да"], ["price", 150.0]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.9ms)[0m  [1mINSERT INTO "medicines" ("medicine_name", "dosage", "quantity_or_volume", "manufacturer", "need_recipe", "price", "category_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["medicine_name", "Амоксициллин"], ["dosage", 1.0], ["quantity_or_volume", 10.0], ["manufacturer", "Биотэк"], ["need_recipe", "да"], ["price", 150.0], ["category_id", 1], ["created_at", "2017-04-28 14:57:15.991286"], ["updated_at", "2017-04-28 14:57:15.991286"]]
+  [1m[35m (2.1ms)[0m  COMMIT
+  [1m[36mMedicine Load (0.5ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."medicine_name" = $1 AND "medicines"."dosage" = $2 AND "medicines"."quantity_or_volume" = $3 AND "medicines"."manufacturer" = $4 AND "medicines"."need_recipe" = $5 AND "medicines"."price" = $6 AND "medicines"."category_id" = 1 LIMIT 1[0m  [["medicine_name", "Парацетамол"], ["dosage", 2.0], ["quantity_or_volume", 15.0], ["manufacturer", "КИМА"], ["need_recipe", "да"], ["price", 120.0]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.6ms)[0m  [1mINSERT INTO "medicines" ("medicine_name", "dosage", "quantity_or_volume", "manufacturer", "need_recipe", "price", "category_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["medicine_name", "Парацетамол"], ["dosage", 2.0], ["quantity_or_volume", 15.0], ["manufacturer", "КИМА"], ["need_recipe", "да"], ["price", 120.0], ["category_id", 1], ["created_at", "2017-04-28 14:57:15.999559"], ["updated_at", "2017-04-28 14:57:15.999559"]]
+  [1m[35m (2.2ms)[0m  COMMIT
+  [1m[36mMedicine Load (0.4ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."medicine_name" = $1 AND "medicines"."dosage" = $2 AND "medicines"."quantity_or_volume" = $3 AND "medicines"."manufacturer" = $4 AND "medicines"."need_recipe" = $5 AND "medicines"."price" = $6 AND "medicines"."category_id" = 2 LIMIT 1[0m  [["medicine_name", "Цефотаксим"], ["dosage", 4.0], ["quantity_or_volume", 5.0], ["manufacturer", "ВИМИН"], ["need_recipe", "да"], ["price", 500.0]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "medicines" ("medicine_name", "dosage", "quantity_or_volume", "manufacturer", "need_recipe", "price", "category_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["medicine_name", "Цефотаксим"], ["dosage", 4.0], ["quantity_or_volume", 5.0], ["manufacturer", "ВИМИН"], ["need_recipe", "да"], ["price", 500.0], ["category_id", 2], ["created_at", "2017-04-28 14:57:16.005929"], ["updated_at", "2017-04-28 14:57:16.005929"]]
+  [1m[35m (3.1ms)[0m  COMMIT
+  [1m[36mMedicine Load (0.4ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."medicine_name" = $1 AND "medicines"."dosage" = $2 AND "medicines"."quantity_or_volume" = $3 AND "medicines"."manufacturer" = $4 AND "medicines"."need_recipe" = $5 AND "medicines"."price" = $6 AND "medicines"."category_id" = 3 LIMIT 1[0m  [["medicine_name", "Лоперамид"], ["dosage", 3.0], ["quantity_or_volume", 7.0], ["manufacturer", "Актива"], ["need_recipe", "да"], ["price", 10.0]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "medicines" ("medicine_name", "dosage", "quantity_or_volume", "manufacturer", "need_recipe", "price", "category_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["medicine_name", "Лоперамид"], ["dosage", 3.0], ["quantity_or_volume", 7.0], ["manufacturer", "Актива"], ["need_recipe", "да"], ["price", 10.0], ["category_id", 3], ["created_at", "2017-04-28 14:57:16.012760"], ["updated_at", "2017-04-28 14:57:16.012760"]]
+  [1m[35m (4.8ms)[0m  COMMIT
+  [1m[36mMedicine Load (0.4ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."medicine_name" = $1 AND "medicines"."dosage" = $2 AND "medicines"."quantity_or_volume" = $3 AND "medicines"."manufacturer" = $4 AND "medicines"."need_recipe" = $5 AND "medicines"."price" = $6 AND "medicines"."category_id" = 4 LIMIT 1[0m  [["medicine_name", "Диклофенак"], ["dosage", 2.0], ["quantity_or_volume", 20.0], ["manufacturer", "BOIRON"], ["need_recipe", "да"], ["price", 549.0]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "medicines" ("medicine_name", "dosage", "quantity_or_volume", "manufacturer", "need_recipe", "price", "category_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["medicine_name", "Диклофенак"], ["dosage", 2.0], ["quantity_or_volume", 20.0], ["manufacturer", "BOIRON"], ["need_recipe", "да"], ["price", 549.0], ["category_id", 4], ["created_at", "2017-04-28 14:57:16.021509"], ["updated_at", "2017-04-28 14:57:16.021509"]]
+  [1m[35m (3.8ms)[0m  COMMIT
+  [1m[36mMedicine Load (0.4ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."medicine_name" = $1 AND "medicines"."dosage" = $2 AND "medicines"."quantity_or_volume" = $3 AND "medicines"."manufacturer" = $4 AND "medicines"."need_recipe" = $5 AND "medicines"."price" = $6 AND "medicines"."category_id" = 5 LIMIT 1[0m  [["medicine_name", "Темазепам"], ["dosage", 1.0], ["quantity_or_volume", 8.0], ["manufacturer", "Бальзам"], ["need_recipe", "да"], ["price", 178.0]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "medicines" ("medicine_name", "dosage", "quantity_or_volume", "manufacturer", "need_recipe", "price", "category_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["medicine_name", "Темазепам"], ["dosage", 1.0], ["quantity_or_volume", 8.0], ["manufacturer", "Бальзам"], ["need_recipe", "да"], ["price", 178.0], ["category_id", 5], ["created_at", "2017-04-28 14:57:16.028994"], ["updated_at", "2017-04-28 14:57:16.028994"]]
+  [1m[35m (4.8ms)[0m  COMMIT
+  [1m[36mMedicine Load (0.5ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."medicine_name" = $1 AND "medicines"."dosage" = $2 AND "medicines"."quantity_or_volume" = $3 AND "medicines"."manufacturer" = $4 AND "medicines"."need_recipe" = $5 AND "medicines"."price" = $6 AND "medicines"."category_id" = 4 LIMIT 1[0m  [["medicine_name", "Фенитоин"], ["dosage", 4.0], ["quantity_or_volume", 15.0], ["manufacturer", "Озон"], ["need_recipe", "да"], ["price", 163.0]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "medicines" ("medicine_name", "dosage", "quantity_or_volume", "manufacturer", "need_recipe", "price", "category_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["medicine_name", "Фенитоин"], ["dosage", 4.0], ["quantity_or_volume", 15.0], ["manufacturer", "Озон"], ["need_recipe", "да"], ["price", 163.0], ["category_id", 4], ["created_at", "2017-04-28 14:57:16.037615"], ["updated_at", "2017-04-28 14:57:16.037615"]]
+  [1m[35m (4.6ms)[0m  COMMIT
+  [1m[36mMedicine Load (0.4ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."medicine_name" = $1 AND "medicines"."dosage" = $2 AND "medicines"."quantity_or_volume" = $3 AND "medicines"."manufacturer" = $4 AND "medicines"."need_recipe" = $5 AND "medicines"."price" = $6 AND "medicines"."category_id" = 3 LIMIT 1[0m  [["medicine_name", "Теофиллин"], ["dosage", 1.0], ["quantity_or_volume", 40.0], ["manufacturer", "Органика"], ["need_recipe", "да"], ["price", 1025.0]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "medicines" ("medicine_name", "dosage", "quantity_or_volume", "manufacturer", "need_recipe", "price", "category_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["medicine_name", "Теофиллин"], ["dosage", 1.0], ["quantity_or_volume", 40.0], ["manufacturer", "Органика"], ["need_recipe", "да"], ["price", 1025.0], ["category_id", 3], ["created_at", "2017-04-28 14:57:16.045673"], ["updated_at", "2017-04-28 14:57:16.045673"]]
+  [1m[35m (4.9ms)[0m  COMMIT
+  [1m[36mMedicine Load (0.4ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."medicine_name" = $1 AND "medicines"."dosage" = $2 AND "medicines"."quantity_or_volume" = $3 AND "medicines"."manufacturer" = $4 AND "medicines"."need_recipe" = $5 AND "medicines"."price" = $6 AND "medicines"."category_id" = 6 LIMIT 1[0m  [["medicine_name", "Нандролон"], ["dosage", 5.0], ["quantity_or_volume", 1.0], ["manufacturer", "Пептек"], ["need_recipe", "да"], ["price", 5000.0]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "medicines" ("medicine_name", "dosage", "quantity_or_volume", "manufacturer", "need_recipe", "price", "category_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["medicine_name", "Нандролон"], ["dosage", 5.0], ["quantity_or_volume", 1.0], ["manufacturer", "Пептек"], ["need_recipe", "да"], ["price", 5000.0], ["category_id", 6], ["created_at", "2017-04-28 14:57:16.054337"], ["updated_at", "2017-04-28 14:57:16.054337"]]
+  [1m[35m (9.3ms)[0m  COMMIT
+  [1m[36mAvaInfo Load (0.8ms)[0m  [1mSELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 1 AND "ava_infos"."medicine_id" = 1 LIMIT 1[0m  [["quantity", 1012]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mAvaInfo Exists (0.5ms)[0m  [1mSELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 1 AND "ava_infos"."medicine_id" = 1) LIMIT 1[0m
+  [1m[35mSQL (1.1ms)[0m  INSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["pharmacy_id", 1], ["medicine_id", 1], ["quantity", 1012], ["created_at", "2017-04-28 14:57:16.085644"], ["updated_at", "2017-04-28 14:57:16.085644"]]
+  [1m[36m (2.2ms)[0m  [1mCOMMIT[0m
+  [1m[35mAvaInfo Load (0.5ms)[0m  SELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 2 AND "ava_infos"."medicine_id" = 1 LIMIT 1  [["quantity", 115]]
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mAvaInfo Exists (0.4ms)[0m  SELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 2 AND "ava_infos"."medicine_id" = 1) LIMIT 1
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pharmacy_id", 2], ["medicine_id", 1], ["quantity", 115], ["created_at", "2017-04-28 14:57:16.093029"], ["updated_at", "2017-04-28 14:57:16.093029"]]
+  [1m[35m (2.8ms)[0m  COMMIT
+  [1m[36mAvaInfo Load (0.3ms)[0m  [1mSELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 5 AND "ava_infos"."medicine_id" = 1 LIMIT 1[0m  [["quantity", 105]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mAvaInfo Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 5 AND "ava_infos"."medicine_id" = 1) LIMIT 1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["pharmacy_id", 5], ["medicine_id", 1], ["quantity", 105], ["created_at", "2017-04-28 14:57:16.103758"], ["updated_at", "2017-04-28 14:57:16.103758"]]
+  [1m[36m (13.6ms)[0m  [1mCOMMIT[0m
+  [1m[35mAvaInfo Load (0.4ms)[0m  SELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 3 AND "ava_infos"."medicine_id" = 5 LIMIT 1  [["quantity", 1002]]
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mAvaInfo Exists (0.4ms)[0m  SELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 3 AND "ava_infos"."medicine_id" = 5) LIMIT 1
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pharmacy_id", 3], ["medicine_id", 5], ["quantity", 1002], ["created_at", "2017-04-28 14:57:16.121371"], ["updated_at", "2017-04-28 14:57:16.121371"]]
+  [1m[35m (3.8ms)[0m  COMMIT
+  [1m[36mAvaInfo Load (0.4ms)[0m  [1mSELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 2 AND "ava_infos"."medicine_id" = 5 LIMIT 1[0m  [["quantity", 135]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mAvaInfo Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 2 AND "ava_infos"."medicine_id" = 5) LIMIT 1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["pharmacy_id", 2], ["medicine_id", 5], ["quantity", 135], ["created_at", "2017-04-28 14:57:16.129898"], ["updated_at", "2017-04-28 14:57:16.129898"]]
+  [1m[36m (4.5ms)[0m  [1mCOMMIT[0m
+  [1m[35mAvaInfo Load (0.4ms)[0m  SELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 1 AND "ava_infos"."medicine_id" = 5 LIMIT 1  [["quantity", 642]]
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mAvaInfo Exists (0.4ms)[0m  SELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 1 AND "ava_infos"."medicine_id" = 5) LIMIT 1
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pharmacy_id", 1], ["medicine_id", 5], ["quantity", 642], ["created_at", "2017-04-28 14:57:16.138443"], ["updated_at", "2017-04-28 14:57:16.138443"]]
+  [1m[35m (4.0ms)[0m  COMMIT
+  [1m[36mAvaInfo Load (0.3ms)[0m  [1mSELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 3 AND "ava_infos"."medicine_id" = 3 LIMIT 1[0m  [["quantity", 645]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mAvaInfo Exists (3.2ms)[0m  [1mSELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 3 AND "ava_infos"."medicine_id" = 3) LIMIT 1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["pharmacy_id", 3], ["medicine_id", 3], ["quantity", 645], ["created_at", "2017-04-28 14:57:16.149652"], ["updated_at", "2017-04-28 14:57:16.149652"]]
+  [1m[36m (15.7ms)[0m  [1mCOMMIT[0m
+  [1m[35mAvaInfo Load (0.4ms)[0m  SELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 5 AND "ava_infos"."medicine_id" = 3 LIMIT 1  [["quantity", 261]]
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mAvaInfo Exists (0.4ms)[0m  SELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 5 AND "ava_infos"."medicine_id" = 3) LIMIT 1
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pharmacy_id", 5], ["medicine_id", 3], ["quantity", 261], ["created_at", "2017-04-28 14:57:16.169454"], ["updated_at", "2017-04-28 14:57:16.169454"]]
+  [1m[35m (4.2ms)[0m  COMMIT
+  [1m[36mAvaInfo Load (0.4ms)[0m  [1mSELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 2 AND "ava_infos"."medicine_id" = 4 LIMIT 1[0m  [["quantity", 163]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mAvaInfo Exists (0.5ms)[0m  [1mSELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 2 AND "ava_infos"."medicine_id" = 4) LIMIT 1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["pharmacy_id", 2], ["medicine_id", 4], ["quantity", 163], ["created_at", "2017-04-28 14:57:16.177921"], ["updated_at", "2017-04-28 14:57:16.177921"]]
+  [1m[36m (3.9ms)[0m  [1mCOMMIT[0m
+  [1m[35mAvaInfo Load (0.4ms)[0m  SELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 4 AND "ava_infos"."medicine_id" = 4 LIMIT 1  [["quantity", 456]]
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mAvaInfo Exists (0.5ms)[0m  SELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 4 AND "ava_infos"."medicine_id" = 4) LIMIT 1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pharmacy_id", 4], ["medicine_id", 4], ["quantity", 456], ["created_at", "2017-04-28 14:57:16.185954"], ["updated_at", "2017-04-28 14:57:16.185954"]]
+  [1m[35m (4.1ms)[0m  COMMIT
+  [1m[36mAvaInfo Load (0.4ms)[0m  [1mSELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 1 AND "ava_infos"."medicine_id" = 6 LIMIT 1[0m  [["quantity", 10001]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mAvaInfo Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 1 AND "ava_infos"."medicine_id" = 6) LIMIT 1[0m
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["pharmacy_id", 1], ["medicine_id", 6], ["quantity", 10001], ["created_at", "2017-04-28 14:57:16.194083"], ["updated_at", "2017-04-28 14:57:16.194083"]]
+  [1m[36m (7.7ms)[0m  [1mCOMMIT[0m
+  [1m[35mAvaInfo Load (0.5ms)[0m  SELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 2 AND "ava_infos"."medicine_id" = 6 LIMIT 1  [["quantity", 7771]]
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mAvaInfo Exists (0.4ms)[0m  SELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 2 AND "ava_infos"."medicine_id" = 6) LIMIT 1
+  [1m[36mSQL (0.5ms)[0m  [1mINSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pharmacy_id", 2], ["medicine_id", 6], ["quantity", 7771], ["created_at", "2017-04-28 14:57:16.206703"], ["updated_at", "2017-04-28 14:57:16.206703"]]
+  [1m[35m (10.2ms)[0m  COMMIT
+  [1m[36mAvaInfo Load (0.4ms)[0m  [1mSELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 3 AND "ava_infos"."medicine_id" = 7 LIMIT 1[0m  [["quantity", 1641]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mAvaInfo Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 3 AND "ava_infos"."medicine_id" = 7) LIMIT 1[0m
+  [1m[35mSQL (0.4ms)[0m  INSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["pharmacy_id", 3], ["medicine_id", 7], ["quantity", 1641], ["created_at", "2017-04-28 14:57:16.221441"], ["updated_at", "2017-04-28 14:57:16.221441"]]
+  [1m[36m (4.5ms)[0m  [1mCOMMIT[0m
+  [1m[35mAvaInfo Load (0.4ms)[0m  SELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 4 AND "ava_infos"."medicine_id" = 7 LIMIT 1  [["quantity", 7643]]
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mAvaInfo Exists (0.4ms)[0m  SELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 4 AND "ava_infos"."medicine_id" = 7) LIMIT 1
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pharmacy_id", 4], ["medicine_id", 7], ["quantity", 7643], ["created_at", "2017-04-28 14:57:16.230088"], ["updated_at", "2017-04-28 14:57:16.230088"]]
+  [1m[35m (4.2ms)[0m  COMMIT
+  [1m[36mAvaInfo Load (0.4ms)[0m  [1mSELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 5 AND "ava_infos"."medicine_id" = 8 LIMIT 1[0m  [["quantity", 273]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mAvaInfo Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 5 AND "ava_infos"."medicine_id" = 8) LIMIT 1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["pharmacy_id", 5], ["medicine_id", 8], ["quantity", 273], ["created_at", "2017-04-28 14:57:16.238410"], ["updated_at", "2017-04-28 14:57:16.238410"]]
+  [1m[36m (1.7ms)[0m  [1mCOMMIT[0m
+  [1m[35mAvaInfo Load (0.4ms)[0m  SELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 1 AND "ava_infos"."medicine_id" = 8 LIMIT 1  [["quantity", 5798]]
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mAvaInfo Exists (0.4ms)[0m  SELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 1 AND "ava_infos"."medicine_id" = 8) LIMIT 1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pharmacy_id", 1], ["medicine_id", 8], ["quantity", 5798], ["created_at", "2017-04-28 14:57:16.244448"], ["updated_at", "2017-04-28 14:57:16.244448"]]
+  [1m[35m (1.8ms)[0m  COMMIT
+  [1m[36mAvaInfo Load (0.4ms)[0m  [1mSELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 3 AND "ava_infos"."medicine_id" = 9 LIMIT 1[0m  [["quantity", 1263]]
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36mAvaInfo Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 3 AND "ava_infos"."medicine_id" = 9) LIMIT 1[0m
+  [1m[35mSQL (0.5ms)[0m  INSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["pharmacy_id", 3], ["medicine_id", 9], ["quantity", 1263], ["created_at", "2017-04-28 14:57:16.250251"], ["updated_at", "2017-04-28 14:57:16.250251"]]
+  [1m[36m (4.6ms)[0m  [1mCOMMIT[0m
+  [1m[35mAvaInfo Load (0.4ms)[0m  SELECT  "ava_infos".* FROM "ava_infos" WHERE "ava_infos"."quantity" = $1 AND "ava_infos"."pharmacy_id" = 5 AND "ava_infos"."medicine_id" = 9 LIMIT 1  [["quantity", 631]]
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35mAvaInfo Exists (0.4ms)[0m  SELECT  1 AS one FROM "ava_infos" WHERE ("ava_infos"."pharmacy_id" = 5 AND "ava_infos"."medicine_id" = 9) LIMIT 1
+  [1m[36mSQL (0.4ms)[0m  [1mINSERT INTO "ava_infos" ("pharmacy_id", "medicine_id", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pharmacy_id", 5], ["medicine_id", 9], ["quantity", 631], ["created_at", "2017-04-28 14:57:16.258982"], ["updated_at", "2017-04-28 14:57:16.258982"]]
+  [1m[35m (22.7ms)[0m  COMMIT
+
+
+Started GET "/" for ::1 at 2017-04-28 17:59:07 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (5.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.haml within layouts/application (5.5ms)
+  Rendered application/_navbar_top.html.haml (56.6ms)
+  Rendered application/_sidebar.html.haml (62.7ms)
+  Rendered application/_flash_messages.html.haml (1.7ms)
+Completed 200 OK in 2447ms (Views: 2401.3ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/login" for ::1 at 2017-04-28 18:01:03 +0300
+Processing by WelcomeController#new as HTML
+  Rendered welcome/_form.html.haml (23.6ms)
+  Rendered welcome/new.html.haml within layouts/application (34.0ms)
+  Rendered application/_navbar_top.html.haml (3.6ms)
+  Rendered application/_sidebar.html.haml (23.2ms)
+  Rendered application/_flash_messages.html.haml (0.1ms)
+Completed 200 OK in 431ms (Views: 259.1ms | ActiveRecord: 12.1ms)
+
+
+Started GET "/assets/favicon-9fb30ab423ede0570894e6820d5b3a598b4a1dbbc9471a98f4d6b42cbe696bd7.ico" for ::1 at 2017-04-28 18:01:04 +0300
+
+
+Started POST "/try_login" for ::1 at 2017-04-28 18:01:15 +0300
+Processing by WelcomeController#create as HTML
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"7Q6r0PDjA7tRwzrqGGrRg10LhsLzfEghp3yGM+NcwD5C+jfM6Q5l5GHu92/KOtie8no8jKPwemNT+W/lpJkrlA==", "email"=>"admin@localhost", "password"=>"[FILTERED]", "remember_me"=>"false", "commit"=>"Войти"}
+  [1m[35mUser Load (8.5ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = 'admin@localhost'  ORDER BY "users"."id" ASC LIMIT 1
+  [1m[36mSQL (11.2ms)[0m  [1mUPDATE "users" SET "failed_logins_count" = 0 WHERE "users"."id" = $1[0m  [["id", 1]]
+  [1m[35mSQL (16.2ms)[0m  UPDATE "users" SET "last_login_at" = '2017-04-28 15:01:15.975535' WHERE "users"."id" = $1  [["id", 1]]
+  [1m[36mSQL (1.8ms)[0m  [1mUPDATE "users" SET "last_login_from_ip_address" = '::1' WHERE "users"."id" = $1[0m  [["id", 1]]
+Redirected to http://localhost:3000/
+  [1m[35mSQL (9.0ms)[0m  UPDATE "users" SET "last_activity_at" = '2017-04-28 15:01:15.999868' WHERE "users"."id" = $1  [["id", 1]]
+Completed 302 Found in 632ms (ActiveRecord: 49.6ms)
+
+
+Started GET "/" for ::1 at 2017-04-28 18:01:16 +0300
+Processing by WelcomeController#index as HTML
+  Rendered welcome/index.html.haml within layouts/application (0.1ms)
+  Rendered application/_navbar_top.html.haml (1.6ms)
+  Rendered application/_sidebar.html.haml (19.4ms)
+  Rendered application/_flash_messages.html.haml (0.2ms)
+  [1m[36mUser Load (0.9ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mSQL (2.4ms)[0m  UPDATE "users" SET "last_activity_at" = '2017-04-28 15:01:16.359009' WHERE "users"."id" = $1  [["id", 1]]
+Completed 200 OK in 312ms (Views: 291.9ms | ActiveRecord: 3.3ms)
+
+
+Started GET "/categories" for ::1 at 2017-04-28 18:01:19 +0300
+Processing by CategoriesController#index as HTML
+  [1m[36mUser Load (3.6ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mRoleUser Load (0.6ms)[0m  SELECT  "role_users".* FROM "role_users" WHERE "role_users"."user_id" = $1  ORDER BY "role_users"."id" ASC LIMIT 1  [["user_id", 1]]
+  [1m[36mRole Load (0.5ms)[0m  [1mSELECT  "roles".* FROM "roles" WHERE "roles"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  Rendered application/_breadcrumb.html.haml (1.2ms)
+  [1m[35mCategory Load (4.1ms)[0m  SELECT "categories".* FROM "categories"
+  Rendered categories/index.html.haml within layouts/application (47.8ms)
+  Rendered application/_navbar_top.html.haml (4.2ms)
+  Rendered application/_sidebar.html.haml (4.2ms)
+  Rendered application/_flash_messages.html.haml (0.1ms)
+  [1m[36mSQL (3.2ms)[0m  [1mUPDATE "users" SET "last_activity_at" = '2017-04-28 15:01:19.723112' WHERE "users"."id" = $1[0m  [["id", 1]]
+Completed 200 OK in 387ms (Views: 244.0ms | ActiveRecord: 27.1ms)
+
+
+Started GET "/assets/favicon-9fb30ab423ede0570894e6820d5b3a598b4a1dbbc9471a98f4d6b42cbe696bd7.ico" for ::1 at 2017-04-28 18:01:20 +0300
+
+
+Started GET "/medicines" for ::1 at 2017-04-28 18:01:22 +0300
+Processing by MedicinesController#index as HTML
+  [1m[35mUser Load (2.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mRoleUser Load (0.8ms)[0m  [1mSELECT  "role_users".* FROM "role_users" WHERE "role_users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mRoleUser Exists (0.4ms)[0m  SELECT  1 AS one FROM "role_users" WHERE "role_users"."user_id" = $1 AND "role_users"."id" = $2 LIMIT 1  [["user_id", 1], ["id", 1]]
+  [1m[36mRole Load (0.4ms)[0m  [1mSELECT  "roles".* FROM "roles" WHERE "roles"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  Rendered application/_breadcrumb.html.haml (0.2ms)
+  [1m[35mMedicine Load (1.2ms)[0m  SELECT "medicines".* FROM "medicines"
+  [1m[36mCategory Load (0.4ms)[0m  [1mSELECT  "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mCategory Load (0.6ms)[0m  [1mSELECT  "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT 1[0m  [["id", 2]]
+  [1m[35mCategory Load (0.7ms)[0m  SELECT  "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT 1  [["id", 3]]
+  [1m[36mCategory Load (1.8ms)[0m  [1mSELECT  "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT 1[0m  [["id", 4]]
+  [1m[35mCategory Load (3.6ms)[0m  SELECT  "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT 1  [["id", 5]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT 1[0m  [["id", 4]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT 1  [["id", 3]]
+  [1m[36mCategory Load (0.4ms)[0m  [1mSELECT  "categories".* FROM "categories" WHERE "categories"."id" = $1 LIMIT 1[0m  [["id", 6]]
+  Rendered medicines/index.html.haml within layouts/application (72.9ms)
+  Rendered application/_navbar_top.html.haml (5.5ms)
+  Rendered application/_sidebar.html.haml (4.3ms)
+  Rendered application/_flash_messages.html.haml (0.1ms)
+  [1m[35mSQL (3.3ms)[0m  UPDATE "users" SET "last_activity_at" = '2017-04-28 15:01:22.558087' WHERE "users"."id" = $1  [["id", 1]]
+Completed 200 OK in 316ms (Views: 248.7ms | ActiveRecord: 17.1ms)
+
+
+Started GET "/assets/favicon-9fb30ab423ede0570894e6820d5b3a598b4a1dbbc9471a98f4d6b42cbe696bd7.ico" for ::1 at 2017-04-28 18:01:22 +0300
+
+
+Started GET "/pharmacies" for ::1 at 2017-04-28 18:01:23 +0300
+Processing by PharmaciesController#index as HTML
+  [1m[36mUser Load (1.9ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mRoleUser Load (0.4ms)[0m  SELECT  "role_users".* FROM "role_users" WHERE "role_users"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mRoleUser Exists (0.4ms)[0m  [1mSELECT  1 AS one FROM "role_users" WHERE "role_users"."user_id" = $1 AND "role_users"."id" = $2 LIMIT 1[0m  [["user_id", 1], ["id", 1]]
+  [1m[35mRole Load (1.3ms)[0m  SELECT  "roles".* FROM "roles" WHERE "roles"."id" = $1 LIMIT 1  [["id", 1]]
+  Rendered application/_breadcrumb.html.haml (0.2ms)
+  [1m[36mPharmacy Load (2.8ms)[0m  [1mSELECT "pharmacies".* FROM "pharmacies"[0m
+  Rendered pharmacies/index.html.haml within layouts/application (42.6ms)
+  Rendered application/_navbar_top.html.haml (3.8ms)
+  Rendered application/_sidebar.html.haml (10.0ms)
+  Rendered application/_flash_messages.html.haml (0.1ms)
+  [1m[35mSQL (2.3ms)[0m  UPDATE "users" SET "last_activity_at" = '2017-04-28 15:01:23.684959' WHERE "users"."id" = $1  [["id", 1]]
+Completed 200 OK in 266ms (Views: 223.9ms | ActiveRecord: 10.8ms)
+
+
+Started GET "/assets/favicon-9fb30ab423ede0570894e6820d5b3a598b4a1dbbc9471a98f4d6b42cbe696bd7.ico" for ::1 at 2017-04-28 18:01:23 +0300
+
+
+Started GET "/ava_infos" for ::1 at 2017-04-28 18:01:25 +0300
+Processing by AvaInfosController#index as HTML
+  [1m[36mUser Load (4.3ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mRoleUser Load (3.8ms)[0m  SELECT  "role_users".* FROM "role_users" WHERE "role_users"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mRoleUser Exists (4.3ms)[0m  [1mSELECT  1 AS one FROM "role_users" WHERE "role_users"."user_id" = $1 AND "role_users"."id" = $2 LIMIT 1[0m  [["user_id", 1], ["id", 1]]
+  [1m[35mRole Load (0.4ms)[0m  SELECT  "roles".* FROM "roles" WHERE "roles"."id" = $1 LIMIT 1  [["id", 1]]
+  Rendered application/_breadcrumb.html.haml (0.2ms)
+  [1m[36mAvaInfo Load (4.9ms)[0m  [1mSELECT "ava_infos".* FROM "ava_infos"[0m
+  [1m[35mPharmacy Load (0.7ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mMedicine Load (0.4ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mPharmacy Load (3.6ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 2]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mPharmacy Load (7.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 5]]
+  [1m[36mCACHE (0.1ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 1]]
+  [1m[35mPharmacy Load (0.4ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 3]]
+  [1m[36mMedicine Load (0.3ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 5]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 2]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 5]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 5]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 3]]
+  [1m[36mMedicine Load (1.1ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 3]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 5]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 3]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 2]]
+  [1m[36mMedicine Load (0.4ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 4]]
+  [1m[35mPharmacy Load (1.5ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 4]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 4]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mMedicine Load (3.6ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 6]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 2]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 6]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 3]]
+  [1m[36mMedicine Load (0.6ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 7]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 4]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 7]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 5]]
+  [1m[36mMedicine Load (0.3ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 8]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 1]]
+  [1m[36mCACHE (0.2ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 8]]
+  [1m[35mCACHE (0.0ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 3]]
+  [1m[36mMedicine Load (0.4ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 9]]
+  [1m[35mCACHE (0.1ms)[0m  SELECT  "pharmacies".* FROM "pharmacies" WHERE "pharmacies"."id" = $1 LIMIT 1  [["id", 5]]
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT  "medicines".* FROM "medicines" WHERE "medicines"."id" = $1 LIMIT 1[0m  [["id", 9]]
+  Rendered ava_infos/index.html.haml within layouts/application (212.6ms)
+  Rendered application/_navbar_top.html.haml (1.3ms)
+  Rendered application/_sidebar.html.haml (2.8ms)
+  Rendered application/_flash_messages.html.haml (0.1ms)
+  [1m[35mSQL (2.1ms)[0m  UPDATE "users" SET "last_activity_at" = '2017-04-28 15:01:25.494298' WHERE "users"."id" = $1  [["id", 1]]
+Completed 200 OK in 362ms (Views: 297.4ms | ActiveRecord: 43.2ms)
+
+
+Started GET "/assets/favicon-9fb30ab423ede0570894e6820d5b3a598b4a1dbbc9471a98f4d6b42cbe696bd7.ico" for ::1 at 2017-04-28 18:01:25 +0300

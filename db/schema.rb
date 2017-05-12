@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20170427051014) do
+=======
+ActiveRecord::Schema.define(version: 20170501085108) do
+>>>>>>> 4681a207acfef92ab970235c4f96b4c3944db4e7
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,6 +123,7 @@ ActiveRecord::Schema.define(version: 20170427051014) do
     t.datetime "last_logout_at"
     t.datetime "last_activity_at"
     t.string   "last_login_from_ip_address"
+    t.date     "birthday"
   end
 
   add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree
