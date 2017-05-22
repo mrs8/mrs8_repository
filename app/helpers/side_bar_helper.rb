@@ -2,10 +2,10 @@ module SideBarHelper
   def side_bar_items(ru)
     result = []
     result << {
-      :name => 'Сслыка без детей',
-      :icon => 'list',
+      :name => @current_user.blank? ? 'Войти' : @current_user.email,
+      :icon => 'user',
       :controller => :welcome, 
-      :action => :index
+      :action => :new
     }
     result << {
       :name => 'Администрирование',
@@ -21,36 +21,26 @@ module SideBarHelper
       {:name => 'Роли',
        :controller => :roles, :action => :index,
        :icon => 'align-center',
-       :class => 'long'},
-      {:name => "Категории лекарств",
-       :controller => :categories, :action => :index,
-       :icon => 'align-center',
-       :class => 'long'},
-      {:name => "Лекарства",
-       :controller => :medicines, :action => :index,
-       :icon => 'align-center',
-       :class => 'long'},
+       :class => 'long'}
+    ]} 
+    result << {
+      :name => 'Навигация',
+      :icon => 'search-plus',
+      :children => [
       {:name => "Аптеки",
        :controller => :pharmacies, :action => :index,
-       :icon => 'align-center',
+       :icon => 'calendar',
        :class => 'long'},
       {:name => "Информация о наличии",
        :controller => :ava_infos, :action => :index,
-       :icon => 'align-center',
+       :icon => 'asterisk',
+       :class => 'long'
+      },
+      {:name => "Поиск лекарств",
+       :controller => :medicines, :action => :search,
+       :icon => 'search',
        :class => 'long'
       }
-    ]} 
-    result << {
-      :name => 'Заголовок ссылок',
-      :icon => 'search-plus',
-      :children => [
-      {:name => 'Ссылка ребёнок',
-       :controller => :welcome, :action => :index,
-       :icon => 'binoculars'},
-      {:name => 'Ссылка ребёнок',
-       :controller => :welcome, :action => :index,
-       :icon => 'search',
-       :class => 'long'}
     ]} 
     result
   end

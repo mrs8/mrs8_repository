@@ -1,0 +1,47 @@
+I"�(function() {
+  var f1;
+
+  this.f4 = function(link) {
+    if (confirm("Вы уверены?")) {
+      link.parent().find("input[type=hidden].remove_fields").first().val("1");
+      return link.parent().parent().parent().parent().hide();
+    }
+  };
+
+  this.f3 = function() {
+    $('a.remove_medicine').on('click', function() {
+      window.f4($(this));
+      return false;
+    });
+    return false;
+  };
+
+  this.f2 = function() {
+    return $('#add_medicine_link').on('click', function() {
+      var content, new_id, panel, regexp;
+      new_id = new Date().getTime();
+      regexp = new RegExp("new_medicine", "g");
+      content = $(this).attr('data-content');
+      alert(2);
+      content = content.replace(regexp, new_id);
+      $(this).parent().parent().after(content);
+      panel = $(this).parent().parent().parent().find('.panel-info').first();
+      panel.find('a.remove_medicine').on('click', function() {
+        window.f4($(this));
+        return false;
+      });
+      return false;
+    });
+  };
+
+  f1 = function() {
+    window.f2();
+    return window.f3();
+  };
+
+  $(document).on('page:load', f1);
+
+  $(document).ready(f1);
+
+}).call(this);
+:ET

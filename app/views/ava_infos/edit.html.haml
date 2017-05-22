@@ -1,7 +1,19 @@
-%h1 Editing ava_info
+=breadcrumb_tag do
+  %li
+    Навигация
+  %li
+    = link_to 'Информация', ava_infos_path
+  %li
+    = link_to(@ava_info.pharmacy.adress, @ava_info)
+  %li.active
+    = t('headers.ava_infos.edit')
+
+
+.row.hidden-sm.hidden-xs
+  .page-header
+    %h1= t('headers.ava_infos.edit')
+.row.visible-sm.visible-xs
+  .page-header
+    %h5= t('headers.ava_infos.edit')
 
 = render 'form'
-
-= link_to 'Show', @ava_info
-\|
-= link_to 'Back', ava_infos_path

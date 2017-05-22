@@ -1,25 +1,21 @@
 = form_for @ava_info do |f|
   = error_messages_for @ava_info
-
+  .form-actions.bottom20
+    = f.submit nil, class: 'btn btn-primary'
   .row
-    .col-md-8
+    .col-md-6
       .form-group
         = f.label :pharmacy
         %br
-        = f.select(:pharmacy_id , options_for_select(pharmacy_for_select(), ), {include_blank: true})
+        = f.select(:pharmacy_id , options_for_select(pharmacy_for_select(), @ava_info.pharmacy_id), {}, class: 'form-control')
         = f.error_messages_for(:pharmacy_id)
   .row
-    .col-md-8
-      .form-group
-        = f.label :medicine
-        %br
-        = f.select(:medicine_id , options_for_select(medicine_for_select(), ), {include_blank: true})
-        = f.error_messages_for(:medicine_id)
-  .row
-    .col-md-8
+    .col-md-6
       .form-group
         = f.label :quantity
         = f.number_field :quantity, class: 'form-control'
-        = f.error_messages_for(:quantity)
-  .form-actions
-    = f.submit nil, class: 'btn btn-primary'
+        = f.error_messages_for(:quantity)  
+  - if @current_role_user.present? and @current_role_user.is_admin?          
+    = f.fields_for(:medicine) do |fr|
+      = fr.hidden_field :id
+      = render('ava_infos/one_med_form', fr: fr)

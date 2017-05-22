@@ -4,15 +4,14 @@
   %li
     Администрирование
 
-
-
-
-%h1= t('app.categories.index')
+.page-header
+  %h1= t('headers.categories.index')
 
 %table.table.table-hover.table-striped.center
   %caption
-    .pull-right
-      = link_to t('app.categories.new-button'), new_category_path, class: 'btn btn-primary'
+    = link_to new_category_path, class: 'btn btn-success' do
+      = fa_icon :plus
+      = t('buttons.new.category')   
   %thead
     %tr
       %th= Category.human_attribute_name(:category_name)

@@ -1,5 +1,17 @@
-%h1 New ava_info
+- if @current_user.present?
+  =breadcrumb_tag do
+    %li
+      Навигация
+    %li
+      = link_to 'Информация', ava_infos_path
+    %li.active
+      = t('headers.ava_infos.new')
+
+.row.hidden-sm.hidden-xs
+  .page-header
+    %h1= t('headers.ava_infos.new')
+.row.visible-sm.visible-xs
+  .page-header
+    %h5= t('headers.ava_infos.new')
 
 = render 'form'
-
-= link_to 'Back', ava_infos_path

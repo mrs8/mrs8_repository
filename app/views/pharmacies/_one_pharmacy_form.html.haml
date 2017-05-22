@@ -1,0 +1,31 @@
+.col-md-6
+  %div{class: 'panel panel-'+ (i.kind_of?(Integer) ? 'success' : 'info')}
+    .panel-heading
+      лекарство
+      = i
+      %span.toright
+        = link_to_remove_medicine(fr)
+      .clearfix
+    .panel-body
+      .row
+        .col-md-12
+          .form-group
+            = fr.label :medicine_id
+            = fr.select :medicine_id,
+            options_for_select(options_for_pharm(), fr.object.medicine_id),
+            {}, class: 'form-control'
+            = fr.error_messages_for(:medicine_id)
+      .row      
+        .col-md-12
+          .form-group
+            = fr.label :quantity
+            = fr.text_field :quantity, class: 'form-control'
+            = fr.error_messages_for(:quantity)
+      .row      
+        .col-md-12
+          = fr.fields_for(:category) do |ffr|
+            = ffr.hidden_field(:id)
+            .form-group
+              = ffr.label :category_name
+              = ffr.text_field :category_name, class: 'form-control'
+              = ffr.error_messages_for(:category_name)

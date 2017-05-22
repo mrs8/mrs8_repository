@@ -1,42 +1,9 @@
 ru:
   app:
-    name: Базовое приложение
+    app_name: Аптеки и лекарства
     company:
       short_name: МПУ
       department: Кафедра
-<<<<<<< HEAD
-    users:
-      index: Список пользователей
-      new-button: Новый пользователь 
-      edit: Редактирование пользователя
-      new: Создание пользователя
-    roles:
-      index: Список возможных ролей пользователей
-      new-button: Новая роль
-      edit: Редактирование роли
-      new: Создание роли
-    categories:
-      index: Категории лекарств
-      new-button: Новая категория
-      edit: Редактирование категории
-      new: Создание категории
-    medicines:
-      index: Лекарства
-      new-button: Добавить новое лекарство
-      edit: Редактирование лекарства
-      new: Создание лекарства
-    pharmacies:
-      index: Аптеки
-      new-button: Добавить новую аптеку
-      edit: Редактирование аптеки
-      new: Создание аптеки
-    ava_infos:
-      index: Информация о наличии лекарств в аптеках
-      new-button: Добавить запись о наличии
-      edit: Редактирование записи о наличии
-      new: Создание записи
-=======
->>>>>>> 4681a207acfef92ab970235c4f96b4c3944db4e7
   helpers:
     submit:
       create: Сохранить
@@ -52,6 +19,12 @@ ru:
     new: 
       user: Новый пользователь
       role: Новая роль
+      category: Создание категории
+      medicine: Создание лекарства
+      ava_info: Создание записи
+      pharmacy: Добавить новую аптеку
+    search:
+      medicines: Начать поиск
   headers:
     users:
       edit: Редактирование пользователя
@@ -61,6 +34,24 @@ ru:
       index: Список возможных ролей пользователей
       edit: Редактирование роли
       new: Новая роль
+    categories:
+      index: Категории лекарств
+      edit: Редактирование категории
+      new: Создание категории
+    medicines:
+      index: Лекарства
+      edit: Редактирование лекарства
+      new: Создание лекарства
+      search: Поиск лекарств
+    pharmacies:
+      index: Аптеки
+      new: Добавить новую аптеку
+      edit: Редактирование аптеки
+    ava_infos:
+      index: Информация о наличии лекарств в аптеках
+      edit: Редактирование записи о наличии
+      new: Создание записи
+      
   views:
     pagination:
       first: ⇤
@@ -86,7 +77,16 @@ ru:
         name: Обозначение
         info: Краткое название
         full_info: Описание
-<<<<<<< HEAD
+      # nested_start
+      role_user: &role_users
+      # nested_finish
+        role: Роль
+        role_id: Роль
+        data: Параметры
+      # nested_start
+      user/role_users:
+        <<: *role_users
+      # nested_finish
       category:
         category_name: Название категории
       medicine:
@@ -101,26 +101,11 @@ ru:
         adress: Адрес аптеки
         number: Номер аптеки
         nearest_metro: Ближайшее метро
-      ava_info:
+      ava_info: &ava_infos
         pharmacy: Номер аптеки
+        pharmacy_id: Номер аптеки
         medicine: Название лекарства
+        medicine_id: Название лекарства
         quantity: Количество
-    errors:
-      models:
-        person:
-          attributes:
-            snils:
-              check_sum: имеет неправильную контрольную сумму
-=======
-      # nested_start
-      role_user: &role_users
-      # nested_finish
-        role: Роль
-        role_id: Роль
-        data: Параметры
-      # nested_start
-      user/role_users:
-        <<: *role_users
-      # nested_finish
->>>>>>> 4681a207acfef92ab970235c4f96b4c3944db4e7
-          
+      pharmacy/ava_infos:
+        <<: *ava_infos

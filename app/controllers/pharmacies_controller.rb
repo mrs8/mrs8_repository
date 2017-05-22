@@ -28,7 +28,7 @@ class PharmaciesController < ApplicationController
 
     respond_to do |format|
       if @pharmacy.save
-        format.html { redirect_to @pharmacy, notice: 'Pharmacy was successfully created.' }
+        format.html { redirect_to @pharmacy, notice: 'Запись об аптеке была успешно создана' }
         format.json { render :show, status: :created, location: @pharmacy }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class PharmaciesController < ApplicationController
   def update
     respond_to do |format|
       if @pharmacy.update(pharmacy_params)
-        format.html { redirect_to @pharmacy, notice: 'Pharmacy was successfully updated.' }
+        format.html { redirect_to @pharmacy, notice: 'Запись об аптеке была успешно обновлена.' }
         format.json { render :show, status: :ok, location: @pharmacy }
       else
         format.html { render :edit }
@@ -56,7 +56,7 @@ class PharmaciesController < ApplicationController
   def destroy
     @pharmacy.destroy
     respond_to do |format|
-      format.html { redirect_to pharmacies_url, notice: 'Pharmacy was successfully destroyed.' }
+      format.html { redirect_to pharmacies_url, notice: 'Запись об аптеке была успешно уничтожена.' }
       format.json { head :no_content }
     end
   end
@@ -69,6 +69,19 @@ class PharmaciesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pharmacy_params
-      params.require(:pharmacy).permit(:adress, :number, :nearest_metro)
+      params.require(:pharmacy).permit(:adress, :number, :nearest_metro,
+      ava_infos_attributes: [:id, :pharmacy, :medicine_, :pharmacy_id, :medicine_id, :quantity, 
+      category_attributes: [:id, :category_name]])
+    end
+    def check_ctr_auth()
+      if action_name.to_sym == :show or action_name.to_sym == :index
+        return true
+      else
+        if @current_role_user.try(:is_admin?)
+          return true
+        else
+          return false
+        end
+      end
     end
 end

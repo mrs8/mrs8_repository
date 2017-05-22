@@ -1,15 +1,22 @@
-%p#notice= notice
+=breadcrumb_tag do
+  %li
+    Навигация
+  %li
+    = link_to 'Аптеки', pharmacies_path
+  %li.active
+    = @pharmacy.adress
 
-%p
-  %b Adress:
-  = @pharmacy.adress
-%p
-  %b Number:
-  = @pharmacy.number
-%p
-  %b Nearest metro:
-  = @pharmacy.nearest_metro
 
-= link_to 'Edit', edit_pharmacy_path(@pharmacy)
-\|
-= link_to 'Back', pharmacies_path
+    
+.row.hidden-sm.hidden-xs
+  %h1= @pharmacy.adress
+.row.visible-sm.visible-xs
+  %h5= @pharmacy.adress
+
+%dl
+  %dt= Pharmacy.human_attribute_name(:adress)
+  %dd= @pharmacy.adress
+  %dt= Pharmacy.human_attribute_name(:number)
+  %dd= @pharmacy.number
+  %dt= Pharmacy.human_attribute_name(:nearest_metro)
+  %dd= @pharmacy.nearest_metro

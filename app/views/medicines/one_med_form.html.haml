@@ -1,0 +1,43 @@
+      .col-md-6
+        .panel.panel-success
+          .panel-heading
+            название
+            = i+1
+          .panel.body
+          .row
+            .col-md-6
+              .form-group
+                = fr.label :medicine_name
+                = fr.text_field :medicine_name, class: 'form-control'
+                = fr.error_messages_for(:medicine_name)
+            .col-md-6
+              .form-group
+                = fr.label :dosage
+                = fr.text_field :dosage, class: 'form-control'
+                = fr.error_messages_for(:dosage)
+            .col-md-8
+              .form-group
+                = fr.label :quantity_or_volume
+                = fr.text_field :quantity_or_volume, class: 'form-control'
+                = fr.error_messages_for(:quantity_or_volume)
+            .col-md-8
+              .form-group
+                = fr.label :manufacturer
+                = fr.text_field :manufacturer, class: 'form-control'
+                = fr.error_messages_for(:manufacturer)
+            .col-md-8
+              .form-group
+                = fr.label :need_recipe
+                = fr.text_field :need_recipe, class: 'form-control'
+                = fr.error_messages_for(:need_recipe)
+            .col-md-8
+              .form-group
+                = fr.label :price
+                = fr.text_field :price, class: 'form-control'
+                = fr.error_messages_for(:price)
+            .col-md-8
+              .form-group
+                = fr.label :category
+                %br
+                = fr.select(:category_id , options_for_select(category_for_select(), @ava_info.medicine.category_id), {include_blank: true})
+                = fr.error_messages_for(:category_id)

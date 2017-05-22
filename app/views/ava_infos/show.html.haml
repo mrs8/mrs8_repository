@@ -1,15 +1,21 @@
-%p#notice= notice
+=breadcrumb_tag do
+  %li
+    Навигация
+  %li
+    = link_to 'Информация', ava_infos_path
+  %li.active
+    = @ava_info.pharmacy.adress
 
-%p
-  %b Pharmacy:
-  = @ava_info.pharmacy
-%p
-  %b Medicine:
-  = @ava_info.medicine
-%p
-  %b Quantity:
-  = @ava_info.quantity
 
-= link_to 'Edit', edit_ava_info_path(@ava_info)
-\|
-= link_to 'Back', ava_infos_path
+.row.hidden-sm.hidden-xs
+  %h1= @ava_info.pharmacy.adress
+.row.visible-sm.visible-xs
+  %h5= @ava_info.pharmacy.adress
+
+%dl
+  %dt= AvaInfo.human_attribute_name(:pharmacy)
+  %dd= @ava_info.pharmacy.number
+  %dt= AvaInfo.human_attribute_name(:medicine)
+  %dd= @ava_info.medicine.medicine_name
+  %dt= AvaInfo.human_attribute_name(:quantity)
+  %dd= @ava_info.quantity

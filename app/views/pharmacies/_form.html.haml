@@ -1,25 +1,24 @@
 = form_for @pharmacy do |f|
   = error_messages_for @pharmacy
-
+  .form-actions.bottom20
+    = f.submit nil, class: 'btn btn-primary'
   .row
-    .col-md-8
+    .col-md-6
       .form-group
         = f.label :adress
         = f.text_field :adress, class: 'form-control'
         = f.error_messages_for(:adress)
   .row
-    .col-md-8
+    .col-md-6
       .form-group
         = f.label :nearest_metro
         = f.text_field :nearest_metro, class: 'form-control'
         = f.error_messages_for(:nearest_metro)
   .row
-    .col-md-4
+    .col-md-6
       .form-group
         = f.label :number
         = f.number_field :number, class: 'form-control'
         = f.error_messages_for(:number)
 
-  .form-actions
-    = f.submit nil, class: 'btn btn-primary'
 

@@ -1,5 +1,8 @@
 %aside.hidden-print#sidebar-wrapper
   %ul.sidebar-nav
+    = link_to root_path do
+      = image_tag 'logo.png', alt: t('app.company.short_name')
+      = t('app.app_name')
     - side_bar_items(@current_role_user).each do |item|
       %li
         - if item.has_key?(:children)
@@ -23,6 +26,13 @@
           = link_to(url_for(controller: item[:controller], action: item[:action]), class: item[:class]) do
             = fa_icon(item[:icon], class: 'menu-icon')
             = item[:name]
+            
+    %div
+      %li
+        = link_to logout_path do
+          = fa_icon 'sign-out'
+          = "Выход"
+             
     %li.footer
       %div
         © В.Ю. Радыгин

@@ -1,0 +1,81 @@
+=breadcrumb_tag do
+  %li
+    Навигация
+  %li
+    Поиск
+
+.row.hidden-sm.hidden-xs
+  .page-header
+    %h1= t('headers.medicines.search')
+.row.visible-sm.visible-xs
+  .page-header
+    %h5= t('headers.medicines.search')
+
+= form_tag search_medicines_path(), method: :get do
+  .row
+    .col-md-6
+      .form-group
+        = Medicine.human_attribute_name(:medicine_name)
+        = text_field_tag 'search[medicine_name]', params['search']['medicine_name'], class: 'form-control'
+  .row
+    .col-md-6
+      .form-group
+        = Medicine.human_attribute_name(:dosage)
+        = text_field_tag 'search[dosage]', params['search']['dosage'], class: 'form-control'
+  .row
+    .col-md-6
+      .form-group
+        = Medicine.human_attribute_name(:quantity_or_volume)
+        = text_field_tag 'search[quantity_or_volume]', params['search']['quantity_or_volume'], class: 'form-control'
+  .row
+    .col-md-6
+      .form-group
+        = Medicine.human_attribute_name(:manufacturer)
+        = text_field_tag 'search[manufacturer]', params['search']['manufacturer'], class: 'form-control'
+  .row
+    .col-md-6
+      .form-group
+        = Medicine.human_attribute_name(:need_recipe)
+        = select_tag('search[need_recipe]' , options_for_select(["да","нет"],), {include_blank: true, class: 'form-control'})
+  .row
+    .col-md-6
+      .form-group
+        = Medicine.human_attribute_name(:price)
+        = text_field_tag 'search[price]', params['search']['price'] , class: 'form-control'
+  .row
+    .col-md-6
+      .form-group
+        = Category.human_attribute_name(:category_name)
+        = select_tag('search[category_id]' , options_for_select(category_for_select(), ), {include_blank: true, class: 'form-control'})
+  .row
+    .col-md-6
+      .form-group
+        = AvaInfo.human_attribute_name(:pharmacy_id)
+        = select_tag('search[pharmacy_id]' , options_for_select(pharmacy_for_select(),), {include_blank: true, class: 'form-control'})
+  .form-actions.bottom20
+    = submit_tag t('buttons.search.medicines'), class: 'btn btn-primary'
+  
+- @medicines.each do |s|
+  %ul
+    %li
+      = Medicine.human_attribute_name(:medicine_name) + ":"
+      = s.medicine_name
+      %ul
+        %li
+          = Medicine.human_attribute_name(:dosage) + ":"
+          = s.dosage
+        %li
+          = Medicine.human_attribute_name(:quantity_or_volume) + ":"
+          = s.quantity_or_volume
+        %li
+          = Medicine.human_attribute_name(:manufacturer) + ":"
+          = s.manufacturer
+        %li
+          = Medicine.human_attribute_name(:need_recipe) + ":"
+          = s.need_recipe
+        %li
+          = Medicine.human_attribute_name(:price) + ":"
+          = s.price
+        %li
+          = Category.human_attribute_name(:category_name) + ":"
+          = s.category.category_name

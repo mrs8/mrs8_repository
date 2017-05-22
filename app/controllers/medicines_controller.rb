@@ -60,6 +60,15 @@ class MedicinesController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def search()
+    if params.has_key?(:search)
+      @medicines = Medicine.search(params[:search])
+    else
+      @medicines = []
+    end
+    params['search'] ||= {}
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -70,5 +79,14 @@ class MedicinesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def medicine_params
       params.require(:medicine).permit(:medicine_name, :dosage, :quantity_or_volume, :manufacturer, :need_recipe, :price, :category_id)
+    end
+    def check_ctr_auth()
+      if action_name.to_sym == :search
+        if @current_role_user.try(:is_admin?) or @current_role_user.try(:is_operator?)
+          return true
+        else
+          return false
+        end
+      end
     end
 end

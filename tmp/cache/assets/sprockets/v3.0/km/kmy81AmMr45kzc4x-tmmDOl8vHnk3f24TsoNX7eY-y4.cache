@@ -1,0 +1,59 @@
+I"u(function() {
+  var ru_ready;
+
+  this.delete_one_ru = function(link) {
+    if (confirm("Вы уверены?")) {
+      link.parent().find("input[type=hidden].remove_fields").first().val("1");
+      return link.parent().parent().parent().parent().hide();
+    }
+  };
+
+  this.del_all_rus = function() {
+    $('a.remove_medicine').on('click', function() {
+      window.delete_one_ru($(this));
+      return false;
+    });
+    return false;
+  };
+
+  this.add_new_ruu = function() {
+    var content, new_id, panel, regexp;
+    alert(0);
+    alert(123);
+    $('#add_medicine_link').on('click', function() {});
+    alert(1);
+    alert(2);
+    new_id = new Date().getTime();
+    alert(new_id);
+    regexp = new RegExp("new_medicine", "g");
+    alert(4);
+    content = $(this).attr('data-content');
+    alert(5);
+    alert(5.5);
+    content = content.replace(regexp, new_id);
+    alert(6);
+    $(this).parent().parent().after(content);
+    alert(7);
+    panel = $(this).parent().parent().parent().find('.panel-info').first();
+    alert(8);
+    panel.find('a.remove_role').on('click', function() {
+      window.delete_one_ru($(this));
+      return false;
+    });
+    alert(9);
+    return false;
+  };
+
+  ru_ready = function() {
+    alert(3);
+    window.add_new_ruu();
+    window.del_all_rus();
+    return alert(4);
+  };
+
+  $(document).on('page:load', ru_ready);
+
+  $(document).ready(ru_ready);
+
+}).call(this);
+:ET

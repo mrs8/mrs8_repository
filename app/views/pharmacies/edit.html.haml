@@ -1,7 +1,19 @@
-%h1 Editing pharmacy
+=breadcrumb_tag do
+  %li
+    Навигация
+  %li
+    = link_to 'Аптеки', pharmacies_path
+  %li
+    = link_to(@pharmacy.adress, @pharmacy)
+  %li.active
+    = t('headers.pharmacies.edit')
+
+
+.row.hidden-sm.hidden-xs
+  .page-header
+    %h1= t('headers.pharmacies.edit')
+.row.visible-sm.visible-xs
+  .page-header
+    %h5= t('headers.pharmacies.edit')
 
 = render 'form'
-
-= link_to 'Show', @pharmacy
-\|
-= link_to 'Back', pharmacies_path

@@ -11,14 +11,3 @@
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
-    %ul.nav.navbar-nav.navbar-right.collapse.navbar-collapse#bs-example-navbar-collapse-1
-      %li
-        = link_to login_path do
-          = @current_user.blank? ? 'войти' : @current_user.email
-      %li
-        - if @current_user.blank?
-          = link_to login_path do
-            = fa_icon 'sign-in'
-        - else
-          = link_to logout_path do
-            = fa_icon 'sign-out'
