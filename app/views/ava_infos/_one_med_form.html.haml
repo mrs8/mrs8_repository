@@ -31,7 +31,7 @@
       .col-md-12
         .form-group
           = Medicine.human_attribute_name(:need_recipe)
-          = select_tag('search[need_recipe]' , options_for_select(["да","нет"], :да), {class: 'form-control'})
+          = fr.select(:need_recipe , options_for_select(["да","нет"], @ava_info.medicine.need_recipe),{}, class: 'form-control')
           = fr.error_messages_for(:need_recipe)
     .row
       .col-md-12

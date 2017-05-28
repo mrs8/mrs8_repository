@@ -67,6 +67,9 @@ class MedicinesController < ApplicationController
     else
       @medicines = []
     end
+    @old_need = params.has_key?(:search) ? params[:search][:need_recipe] : ""
+    @old_category_id = params.has_key?(:search) ? params[:search][:category_id] : ""
+    @old_pharmacy_id = params.has_key?(:search) ? params[:search][:pharmacy_id] : ""
     params['search'] ||= {}
   end
 

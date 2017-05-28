@@ -36,7 +36,7 @@
     .col-md-6
       .form-group
         = Medicine.human_attribute_name(:need_recipe)
-        = select_tag('search[need_recipe]' , options_for_select(["да","нет"],), {include_blank: true, class: 'form-control'})
+        = select_tag('search[need_recipe]' , options_for_select(["да","нет"], @old_need), {include_blank: true, class: 'form-control'})
   .row
     .col-md-6
       .form-group
@@ -46,36 +46,59 @@
     .col-md-6
       .form-group
         = Category.human_attribute_name(:category_name)
-        = select_tag('search[category_id]' , options_for_select(category_for_select(), ), {include_blank: true, class: 'form-control'})
+        = select_tag('search[category_id]' , options_for_select(category_for_select(), @old_category_id), {include_blank: true, class: 'form-control'})
   .row
     .col-md-6
       .form-group
         = AvaInfo.human_attribute_name(:pharmacy_id)
-        = select_tag('search[pharmacy_id]' , options_for_select(pharmacy_for_select(),), {include_blank: true, class: 'form-control'})
+        = select_tag('search[pharmacy_id]' , options_for_select(pharmacy_for_select(), @old_pharmacy_id), {include_blank: true, class: 'form-control'})
   .form-actions.bottom20
     = submit_tag t('buttons.search.medicines'), class: 'btn btn-primary'
-  
-- @medicines.each do |s|
-  %ul
-    %li
-      = Medicine.human_attribute_name(:medicine_name) + ":"
-      = s.medicine_name
-      %ul
-        %li
+
+.row.hidden-xs
+  - @medicines.each do |s|
+    .col-md-12
+      .list-group
+        .list-group-item
+          = Medicine.human_attribute_name(:medicine_name) + ":"
+          = s.medicine_name.to_s + ", "
           = Medicine.human_attribute_name(:dosage) + ":"
-          = s.dosage
-        %li
+          = s.dosage.to_s.to_s + ", "
           = Medicine.human_attribute_name(:quantity_or_volume) + ":"
-          = s.quantity_or_volume
-        %li
+          = s.quantity_or_volume.to_s + ", "
           = Medicine.human_attribute_name(:manufacturer) + ":"
-          = s.manufacturer
-        %li
+          = s.manufacturer.to_s + ", "
           = Medicine.human_attribute_name(:need_recipe) + ":"
-          = s.need_recipe
-        %li
+          = s.need_recipe.to_s + ", "
           = Medicine.human_attribute_name(:price) + ":"
-          = s.price
-        %li
+          = s.price.to_s + ", "
           = Category.human_attribute_name(:category_name) + ":"
           = s.category.category_name
+      
+.row.visible-xs
+  - @medicines.each do |s|
+    .col-md-12
+      .list-group
+        .list-group-item
+          .col-md-6
+            = Medicine.human_attribute_name(:medicine_name) + ":"
+            = s.medicine_name.to_s + ", "
+          .col-md-6
+            = Medicine.human_attribute_name(:dosage) + ":"
+            = s.dosage.to_s.to_s + ", "
+          .col-md-6
+            = Medicine.human_attribute_name(:quantity_or_volume) + ":"
+            = s.quantity_or_volume.to_s + ", "
+          .col-md-6
+            = Medicine.human_attribute_name(:manufacturer) + ":"
+            = s.manufacturer.to_s + ", "
+          .col-md-6
+            = Medicine.human_attribute_name(:need_recipe) + ":"
+            = s.need_recipe.to_s + ", "
+          .col-md-6
+            = Medicine.human_attribute_name(:price) + ":"
+            = s.price.to_s + ", "
+          .col-md-6
+            = Category.human_attribute_name(:category_name) + ":"
+            = s.category.category_name.to_s + "."
+  
